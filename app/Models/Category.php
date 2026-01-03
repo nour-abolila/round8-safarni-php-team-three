@@ -26,4 +26,9 @@ class Category extends Model
     {
         return $this->hasMany(Flight::class);
     }
+
+    public function tours()
+    {
+        return $this->hasMany(Tour::class);
+    }
 }
