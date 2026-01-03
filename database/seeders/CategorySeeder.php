@@ -15,24 +15,20 @@ class CategorySeeder extends Seeder
            Category::factory()->count(4)->create();
         $categories = [
             [
-                'key' => 'flights_economy',
-                'title' => 'رحلات اقتصادية'
+                'key' => 'flights',
+                'title' => 'رحلات'
             ],
             [
-                'key' => 'flights_business',
-                'title' => 'رحلات رجال الأعمال'
+                'key' => 'cars',
+                'title' => 'سيارات'
             ],
             [
-                'key' => 'cars_economy',
-                'title' => 'سيارات اقتصادية'
+                'key' => 'tours',
+                'title' => 'جولات'
             ],
             [
-                'key' => 'cars_suv',
-                'title' => 'سيارات دفع رباعي'
-            ],
-            [
-                'key' => 'cars_luxury',
-                'title' => 'سيارات فاخرة'
+                'key' => 'hotels',
+                'title' => 'فنادق'
             ],
         ];
 
