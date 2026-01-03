@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Image extends Model
 {
-    public function images() {
-    return $this->morphMany(Image::class, 'imageable');
-}
+  use HasFactory;  
+    public function imageable()
+    {
+        return $this->morphTo();
+    }
 
 }
