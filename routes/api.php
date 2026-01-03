@@ -7,4 +7,4 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::api('hotel', HotelController::class);
+Route::apiResource('hotel', HotelController::class);

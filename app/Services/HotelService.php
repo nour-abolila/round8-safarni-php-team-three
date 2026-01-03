@@ -7,10 +7,7 @@ class HotelService
     /**
      * Create a new class instance.
      */
-   
         public function getHotels(){
-
             Hotel::with('images')->orderByDesc('rating')->get();
         }
-  
 }
