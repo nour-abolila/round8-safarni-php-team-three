@@ -6,8 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class TourSchedule extends Model
 {
-    public function schedules() {
-    return $this->hasMany(TourSchedule::class);
-}
+    protected $fillable = [
+        'tour_id',
+        'start_date',
+        'capacity',
+        'available_slots',
+    ];
 
+    protected $casts = [
+        'start_date' => 'date',
+    ];
+
+    // العلاقات
+    public function tour()
+    {
+        return $this->belongsTo(Tour::class);
+    }
 }

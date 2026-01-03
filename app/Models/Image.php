@@ -6,8 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Image extends Model
 {
-    public function images() {
-    return $this->morphMany(Image::class, 'imageable');
-}
+    protected $fillable = [
+        'imageable_id',
+        'imageable_type',
+        'url',
+    ];
 
+    // العلاقات
+    public function imageable()
+    {
+        return $this->morphTo();
+    }
 }
