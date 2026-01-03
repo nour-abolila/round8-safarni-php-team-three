@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
 
+
             CategorySeeder::class,
             
             UserSeeder::class,       
@@ -25,6 +26,11 @@ class DatabaseSeeder extends Seeder
             RoomSeeder::class,
             
             ImageSeeder::class,
+
+            FlightSeeder::class,
+            
+            CarSeeder::class,
+
         ]);
     }
 }
