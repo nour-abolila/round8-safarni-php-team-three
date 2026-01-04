@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('arrival_airport_code');
             $table->dateTime('scheduled_departure');
             $table->dateTime('scheduled_arrival');
+            $table->date('departure_date');
+            $table->date('arrival_date');
             $table->integer('duration_minutes');
             $table->string('aircraft_type');
             $table->string('booking_class');
@@ -27,6 +29,7 @@ return new class extends Migration
             $table->decimal('current_price', 10, 2);
             $table->timestamp('price_last_updated');
             $table->foreignId('category_id')->constrained();
+            $table->integer('total_seats')->nullable();
             $table->timestamps();
         });
     }
