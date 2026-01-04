@@ -14,10 +14,11 @@ class CarSeeder extends Seeder
      */
     public function run(): void
     {
-        // الحصول على معرفات الفئات
-        $economyCategory = DB::table('categories')->where('key', 'cars_economy')->first();
-        $suvCategory = DB::table('categories')->where('key', 'cars_suv')->first();
-        $luxuryCategory = DB::table('categories')->where('key', 'cars_luxury')->first();
+        $category = DB::table('categories')->where('key', 'cars')->first();
+
+        if (!$category) {
+            throw new \Exception('يجب إنشاء تصنيف السيارات أولاً. قم بتشغيل CategorySeeder');
+        }
 
         $cars = [];
         $brands = ['Toyota', 'Honda', 'Ford', 'BMW', 'Mercedes', 'Hyundai', 'Kia', 'Nissan', 'Chevrolet'];
@@ -37,43 +38,36 @@ class CarSeeder extends Seeder
         $fuelTypes = ['Gasoline', 'Diesel', 'Hybrid', 'Electric'];
         $transmissions = ['Automatic', 'Manual'];
 
-        // إحداثيات عشوائية في السعودية
         $saudiCoordinates = [
-            ['lat' => 24.7136, 'lng' => 46.6753], // الرياض
-            ['lat' => 21.4858, 'lng' => 39.1925], // جدة
-            ['lat' => 26.4207, 'lng' => 50.0888], // الدمام
-            ['lat' => 24.4667, 'lng' => 39.6000], // المدينة المنورة
-            ['lat' => 26.2361, 'lng' => 50.0393], // الخبر
+            ['lat' => 24.7136, 'lng' => 46.6753],
+            ['lat' => 21.4858, 'lng' => 39.1925],
+            ['lat' => 26.4207, 'lng' => 50.0888],
+            ['lat' => 24.4667, 'lng' => 39.6000],
+            ['lat' => 26.2361, 'lng' => 50.0393],
         ];
 
         for ($i = 1; $i <= 30; $i++) {
             $brand = $brands[array_rand($brands)];
             $model = $modelsByBrand[$brand][array_rand($modelsByBrand[$brand])];
 
-            // تحديد الفئة بناءً على الماركة والموديل
-            if (in_array($brand, ['BMW', 'Mercedes'])) {
-                $categoryId = $luxuryCategory->id;
-                $vehicleClass = 'Luxury';
-            } elseif (in_array($model, ['RAV4', 'CR-V', 'Explorer', 'X5', 'GLC', 'Tucson', 'Sportage', 'Rogue', 'Equinox'])) {
-                $categoryId = $suvCategory->id;
-                $vehicleClass = 'SUV';
-            } else {
-                $categoryId = $economyCategory->id;
-                $vehicleClass = in_array($model, ['Camry', 'Accord', 'Sonata', 'Optima', 'Altima', 'Malibu']) ? 'Midsize' : 'Compact';
-            }
+            $vehicleClass = $this->determineVehicleClass($brand, $model);
 
             $location = $saudiCoordinates[array_rand($saudiCoordinates)];
+
+            $seatCount = $this->determineSeatCount($vehicleClass);
+
+            $luggageCapacity = $this->determineLuggageCapacity($vehicleClass);
 
             $cars[] = [
                 'brand' => $brand,
                 'model' => $model,
                 'model_year' => rand(2019, 2024),
                 'vehicle_class' => $vehicleClass,
-                'seat_count' => $vehicleClass === 'SUV' ? rand(5, 7) : ($vehicleClass === 'Luxury' ? 5 : rand(4, 5)),
+                'seat_count' => $seatCount,
                 'door_count' => 4,
                 'fuel_type' => $fuelTypes[array_rand($fuelTypes)],
                 'transmission' => $transmissions[array_rand($transmissions)],
-                'luggage_capacity' => $vehicleClass === 'SUV' ? rand(3, 5) : ($vehicleClass === 'Luxury' ? rand(2, 4) : rand(1, 3)),
+                'luggage_capacity' => $luggageCapacity,
                 'has_ac' => true,
                 'current_location_lat' => $location['lat'] + (rand(-100, 100) / 1000),
                 'current_location_lng' => $location['lng'] + (rand(-100, 100) / 1000),
@@ -84,13 +78,43 @@ class CarSeeder extends Seeder
                     'leather_seats' => $vehicleClass === 'Luxury' ? true : false,
                     'backup_camera' => true,
                 ]),
-                'is_available' => true,
-                'category_id' => $categoryId,
+                'is_available' => rand(0, 1) ? true : false, // بعض السيارات غير متاحة
+                'category_id' => $category->id,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];
         }
 
         DB::table('cars')->insert($cars);
+    }
+    private function determineVehicleClass(string $brand, string $model): string
+    {
+        if (in_array($brand, ['BMW', 'Mercedes'])) {
+            return 'Luxury';
+        } elseif (in_array($model, ['RAV4', 'CR-V', 'Explorer', 'X5', 'GLC', 'Tucson', 'Sportage', 'Rogue', 'Equinox', 'Santa Fe', 'Pilot', 'Pathfinder', 'Tahoe'])) {
+            return 'SUV';
+        } elseif (in_array($model, ['Camry', 'Accord', 'Sonata', 'Optima', 'Altima', 'Malibu', 'Fusion'])) {
+            return 'Sedan';
+        } else {
+            return 'Compact';
+        }
+    }
+    private function determineSeatCount(string $vehicleClass): int
+    {
+        return match($vehicleClass) {
+            'SUV' => rand(5, 7),
+            'Luxury' => 5,
+            'Sedan' => rand(4, 5),
+            default => rand(4, 5),
+        };
+    }
+    private function determineLuggageCapacity(string $vehicleClass): int
+    {
+        return match($vehicleClass) {
+            'SUV' => rand(3, 5),
+            'Luxury' => rand(2, 4),
+            'Sedan' => rand(2, 3),
+            default => rand(1, 2), 
+        };
     }
 }

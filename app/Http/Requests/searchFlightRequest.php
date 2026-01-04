@@ -22,7 +22,12 @@ class searchFlightRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'from' => 'required',
+            'to' => 'required',
+            'departure_date' => 'required|date',
+            'return_date' => 'nullable|date|after_or_equal:departure_date',
+            'passengers' => 'required|integer|min:1',
+            'type' => 'required|in:one-way,round-trip',
         ];
     }
 }
