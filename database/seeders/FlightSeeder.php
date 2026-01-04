@@ -14,8 +14,7 @@ class FlightSeeder extends Seeder
      */
     public function run(): void
     {
-        $economyCategory = DB::table('categories')->where('key', 'flights_economy')->first();
-        $businessCategory = DB::table('categories')->where('key', 'flights_business')->first();
+        $Category = DB::table('categories')->where('key', 'flights')->first();
 
         $flights = [];
         $airports = ['JED', 'RUH', 'DMM', 'MED', 'CAI', 'DXB', 'AUH', 'DOH', 'IST', 'LHR'];
@@ -38,7 +37,7 @@ class FlightSeeder extends Seeder
             $taxes = $basePrice * 0.15;
             $totalPrice = $basePrice + $taxes;
 
-            $categoryId = $basePrice > 1500 ? $businessCategory->id : $economyCategory->id;
+            $categoryId = $Category->id;
 
             $currentPrice = $basePrice * (1 + (rand(-10, 10) / 100));
 
@@ -48,12 +47,15 @@ class FlightSeeder extends Seeder
                 'arrival_airport_code' => $arrivalAirport,
                 'scheduled_departure' => $departureDate,
                 'scheduled_arrival' => $arrivalDate,
+                'departure_date' => $departureDate->toDateString(),
+                'arrival_date' => $arrivalDate->toDateString(),
                 'duration_minutes' => $duration,
                 'aircraft_type' => $aircraftTypes[array_rand($aircraftTypes)],
                 'booking_class' => $bookingClasses[array_rand($bookingClasses)],
                 'base_price' => $basePrice,
                 'total_price' => $totalPrice,
-                'booked_seats' => rand(0, 200),
+                'total_seats' => rand(20, 50),
+                'booked_seats' => rand(10, 20),
                 'current_price' => $currentPrice,
                 'price_last_updated' => Carbon::now()->subHours(rand(1, 24)),
                 'category_id' => $categoryId,
