@@ -28,5 +28,8 @@ class Room extends Model
     {
         return $this->morphMany(BookingDetail::class, 'bookable');
     }
-
+     public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
 }

@@ -1,14 +1,17 @@
 <?php
 
 namespace App\Services;
-
+use App\Models\Room;
 class RoomService
 {
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
+       public function getRoomDetails($id)
     {
-        //
+           return Room::where('id', $id)
+        
+           ->where('is_available', true)
+        
+           ->with(['hotel', 'images'])
+        
+           ->first();
     }
 }

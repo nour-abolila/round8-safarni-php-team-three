@@ -45,16 +45,6 @@ class HotelDetailsResource extends JsonResource
                     'id' => $room->id,
            
                     'name' => $room->name,
-           
-                    'area' => $room->area,
-           
-                    'occupancy' => $room->occupancy,
-           
-                    'bed_number' => $room->bed_number,
-           
-                    'price_per_night' => $room->price_per_night,
-           
-                    'refundable' => $room->refundable,
                 ];
             }),
         ];
