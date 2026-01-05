@@ -2,15 +2,17 @@
 
 namespace App\Repositories\BookingRepositories;
 
-use App\Interfaces\Repositories\FlightRepositoryInterface;
 use App\Models\Flight;
-use App\Resources\Flights\FlightResource;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
 
 class FlightRepositories
 {
-    public function searchOneWay(array $criteria): array
+
+    public function findById(int $id): ?Flight
+    {
+        return Flight::findOrFail($id);
+    }
+
+    public function searchOneWay(array $criteria)
     {
         $query = Flight::query();
 
@@ -21,9 +23,8 @@ class FlightRepositories
 
         $query->orderBy('scheduled_departure');
 
-        return [
-            'flights' => FlightResource::collection($query->get())
-        ];
+        return ['flights' => $query->get()];
+
     }
 
     public function searchRoundTrip(array $criteria): array
@@ -31,18 +32,20 @@ class FlightRepositories
         $departureFlights = $this->searchOneWay([
             'from' => $criteria['from'],
             'to' => $criteria['to'],
-            'departure_date' => $criteria['departure_date']
+            'departure_date' => $criteria['departure_date'],
+            'passengers' => $criteria['passengers']
         ]);
 
         $returnFlights = $this->searchOneWay([
             'from' => $criteria['to'],
             'to' => $criteria['from'],
-            'departure_date' => $criteria['return_date']
+            'departure_date' => $criteria['return_date'],
+            'passengers' => $criteria['passengers']
         ]);
 
         return [
-            'departure_flights' => FlightResource::collection($departureFlights),
-            'return_flights' => FlightResource::collection($returnFlights)
+            'departure_flights' => $departureFlights,
+            'return_flights' => $returnFlights
         ];
     }
 
@@ -51,14 +54,11 @@ class FlightRepositories
         return Flight::where('flight_number', $flightNumber)->first();
     }
 
-     public function checkSeatAvailability(int $flightId, int $requiredSeats): bool
+    public function getFlightSeat(Flight $flight, int $seatId)
     {
-        $flight = Flight::find($flightId);
-        if (!$flight) {
-            return false;
-        }
-
-        $availableSeats = $flight->total_seats - $flight->booked_seats;
-        return $availableSeats >= $requiredSeats;
+        return $flight->flightSeats()->where('id', $seatId)
+        ->lockForUpdate()
+        ->first();
     }
+
 }
