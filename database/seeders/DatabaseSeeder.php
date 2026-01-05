@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             UserSeeder::class,
             FlightSeeder::class,
+            RoleSeeder::class,
             CarSeeder::class,
         ]);
     }
