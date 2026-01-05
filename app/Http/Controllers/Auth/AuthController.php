@@ -4,13 +4,17 @@ namespace App\Http\Controllers\Auth;
 
 use App\Helper\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Requests\Auth\VerifyOtpRequest;
 use App\Http\Resources\UserResource;
+use App\Mail\OtpMail;
 use App\Models\User;
 use App\Services\Auth\AuthService;
 use App\Services\Auth\OtpService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -68,5 +72,39 @@ class AuthController extends Controller
         return ApiResponse::success([
             'message' => 'Logged out successfully'
         ], 200);
+    }
+
+
+    public function forgotPassword(ForgotPasswordRequest $request)
+    {
+        $user = $this->authService->getUserByEmail($request->email);
+
+        $otp = $this->otpService->generateOtpCode($user);
+
+        Mail::to($user->email)->send(new OtpMail($otp));
+
+        return ApiResponse::success([
+            'message' => 'OTP sent to your email',
+            'user_id' => $user->id,
+        ]);
+    }
+
+
+
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        $user = $this->authService->getUserByEmail(
+            email: \App\Models\User::find($request->user_id)->email
+        );
+
+        if (!$this->otpService->verifyOtpCode($user, $request->otp)) {
+            return ApiResponse::error('Invalid or expired OTP', 422);
+        }
+
+        $this->authService->resetPassword($user, $request->password);
+
+        return ApiResponse::success([
+            'message' => 'Password reset successfully',
+        ]);
     }
 }

@@ -53,4 +53,21 @@ class AuthService
             'token' => $token,
         ];
     }
+
+    public function getUserByEmail(string $email)
+    {
+        $user = User::where('email', $email)->first();
+
+        return $user;
+    }
+
+    public function resetPassword(User $user, string $password): void
+    {
+        $user->update([
+            'password' => Hash::make($password),
+        ]);
+
+        // حذف كل التوكنز القديمة
+        $user->tokens()->delete();
+    }
 }
