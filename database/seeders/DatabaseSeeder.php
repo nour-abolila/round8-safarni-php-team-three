@@ -30,7 +30,8 @@ class DatabaseSeeder extends Seeder
             FlightSeeder::class,
             
             CarSeeder::class,
-
+            
+            ReviewSeeder::class,
         ]);
     }
 }
