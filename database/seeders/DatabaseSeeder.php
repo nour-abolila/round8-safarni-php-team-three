@@ -28,7 +28,9 @@ class DatabaseSeeder extends Seeder
             ImageSeeder::class,
 
             FlightSeeder::class,
-            
+
+            RoleSeeder::class,
+
             CarSeeder::class,
             
             ReviewSeeder::class,
