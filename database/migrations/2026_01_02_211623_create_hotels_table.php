@@ -11,18 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hotels', function (Blueprint $table) {
+       Schema::create('hotels', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('address');
-            $table->string('location');
+            $table->string('location'); 
+            $table->decimal('lat', 10, 7);
+            $table->decimal('lng', 10, 7);
             $table->text('content_info')->nullable();
             $table->text('description');
             $table->string('slug')->unique();
             $table->json('amenities')->nullable();
             $table->foreignId('category_id')->constrained();
             $table->timestamps();
+            
+            $table->index(['lat', 'lng']);
         });
+
     }
 
     /**

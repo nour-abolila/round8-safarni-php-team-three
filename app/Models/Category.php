@@ -1,34 +1,29 @@
 <?php
 
 namespace App\Models;
-
+use App\Models\Hotel;
+use App\Models\Car;
+use App\Models\Flight;
+use App\Models\Tour;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    protected $fillable = [
-        'key',
-        'title',
-    ];
+    protected $guarded = [];
 
-    // العلاقات
-    public function cars()
-    {
+    public function cars() {
         return $this->hasMany(Car::class);
     }
-
-    public function hotels()
-    {
+    public function hotels() {
         return $this->hasMany(Hotel::class);
     }
-
-    public function flights()
-    {
+    public function flights() {
         return $this->hasMany(Flight::class);
     }
-
     public function tours()
     {
         return $this->hasMany(Tour::class);
     }
+
 }
