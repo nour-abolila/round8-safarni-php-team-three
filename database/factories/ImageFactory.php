@@ -20,7 +20,7 @@ class ImageFactory extends Factory
 
         return [
             
-            'url' => $this->faker->imageUrl(640, 480, 'hotel', true),
+            'url' => 'https://picsum.photos/640/480?random=' . $this->faker->unique()->numberBetween(1, 1000),
 
             'imageable_id' => $id,
             

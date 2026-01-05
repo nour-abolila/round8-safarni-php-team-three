@@ -13,19 +13,16 @@ class HotelFactory extends Factory
     public function definition()
     {
         $name = $this->faker->company;
+        
         return [
            
             'name' => $name,
-           
-            'address' => $this->faker->address,
            
             'location' => $this->faker->city,
            
             'lat' => $this->faker->latitude,
            
             'lng' => $this->faker->longitude,
-           
-            'rating' => $this->faker->randomFloat(1, 1, 5),
            
             'content_info' => $this->faker->sentence,
            

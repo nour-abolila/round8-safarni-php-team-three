@@ -13,15 +13,13 @@ class HotelResource extends JsonResource
             'id' => $this->id,
 
             'name' => $this->name,
-            
-            'address' => $this->address,
-            
+             
             'location' => $this->location,
             
             'content_info' => $this->content_info,
             
-            'rating' => $this->rating,
-                        
+            'rating' => round($this->reviews_avg_rating, 1),
+            
             'image' => $this->images->first()?->url, 
         ];
     }

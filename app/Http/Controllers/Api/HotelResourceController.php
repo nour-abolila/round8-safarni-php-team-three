@@ -6,6 +6,7 @@ use App\Services\HotelService;
 use App\Http\Resources\HotelResource;
 use App\Http\Resources\HotelDetailsResource;
 use App\Helper\ApiResponse;
+use Illuminate\Http\Request;
 
 class HotelResourceController extends Controller
 {
@@ -16,16 +17,22 @@ class HotelResourceController extends Controller
         $this->hotelService = $hotelService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $hotels = $this->hotelService->getHotels();
+         $lat = $request->query('lat'); 
+
+         $lng = $request->query('lng'); 
+
+        $hotels = $this->hotelService->getHotels($lat, $lng);
 
         return ApiResponse::success(HotelResource::collection($hotels));
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
-        $hotel = $this->hotelService->getHotelDetails($id); 
+        $roomsPerPage = $request->query('rooms_per_page', 5); 
+    
+        $hotel = $this->hotelService->getHotelDetails($id, $roomsPerPage);
 
         return ApiResponse::success(new HotelDetailsResource($hotel));
     }

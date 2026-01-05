@@ -5,11 +5,15 @@ use App\Models\Hotel;
 
 class HotelService {
     
-    public function getHotels(?float $lat = null , ?float $lan = null){
+    public function getHotels(?float $lat = null , ?float $lng = null){
             
-           $query = Hotel::query()->with('images')
-           
-           ->orderByDesc('rating');
+         $query = Hotel::query()
+   
+         ->with('images')
+   
+         ->withAvg('reviews', 'rating')
+   
+         ->orderByDesc('reviews_avg_rating');
 
             
         if ($lat && $lng) {
@@ -39,17 +43,21 @@ class HotelService {
 
         return $query->paginate(10);
      }
-    public function getHotelDetails(int $id){
+    public function getHotelDetails(int $id, int $roomsPerPage = 5)
+    {
+        $hotel = Hotel::with('images')
+        
+        ->withAvg('reviews', 'rating')
+        
+        ->findOrFail($id);
 
-        return Hotel::with([
-           
-            'images',
+       
+        $hotel->rooms = $hotel->rooms()
+        
+        ->where('is_available', true)
+        
+        ->paginate($roomsPerPage);
 
-             'rooms' => function ($q) {
-            
-                $q->where('is_available', true);
-           
-            }])->findOrFail($id);
-
-     }
+        return $hotel;
+    }
 }

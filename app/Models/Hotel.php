@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Room;
 use App\Models\Image;
+use App\Models\Review;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Hotel extends Model
