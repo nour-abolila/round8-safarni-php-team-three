@@ -9,7 +9,7 @@ use App\Models\Flight;
 use App\Repositories\BookingRepositories\BookRepository;
 use App\Repositories\BookingRepositories\FlightRepositories;
 use App\DTOs\FlightSearchDTO;
-use App\Resources\Flights\FlightResource;
+use App\Http\Resources\Flights\FlightResource;
 use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;

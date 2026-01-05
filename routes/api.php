@@ -21,8 +21,8 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/search-flights', [BookingController::class, 'searchFlights']);
 
-Route::get('/flight-seats/{id}', [BookingController::class, 'getFlightSeat']);
+    Route::get('/flight-seats/{id}', [BookingController::class, 'getFlightSeat']);
 
-Route::post('/book-flight/{flightId}', [BookingController::class, 'bookFlight']);
+    Route::post('/book-flight/{flightId}', [BookingController::class, 'bookFlight']);
 });
 

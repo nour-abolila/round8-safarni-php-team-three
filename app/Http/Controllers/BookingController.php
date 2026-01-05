@@ -7,8 +7,7 @@ use App\Helper\ApiResponse;
 use App\Http\Requests\searchFlightRequest;
 use App\Http\Requests\SeatFlightRequest;
 use App\Repositories\BookingRepositories\FlightRepositories;
-use App\Resources\Flights\FlightResource;
-use App\Resources\Flights\FlightSeatResource;
+use App\Http\Resources\Flights\FlightSeatResource;
 use Illuminate\Http\Request;
 use App\Services\BookingServices\FlightServices;
 

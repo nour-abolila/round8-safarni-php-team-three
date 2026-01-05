@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Resources\Flights;
+namespace App\Http\Resources\Flights;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
