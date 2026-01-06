@@ -22,4 +22,9 @@ class BookRepository
     {
         return BookingDetail::create($data);
     }
+
+    public function find($id)
+    {
+        return Booking::findOrFail($id);
+    }
 }

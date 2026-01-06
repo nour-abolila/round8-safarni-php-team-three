@@ -20,11 +20,16 @@ return new class extends Migration
             $table->integer('seat_count');
             $table->integer('door_count');
             $table->string('fuel_type');
+            $table->integer('power');
+            $table->integer('max_speed');
+            $table->decimal('acceleration', 4, 2);
             $table->string('transmission');
             $table->integer('luggage_capacity');
             $table->boolean('has_ac')->default(true);
             $table->decimal('current_location_lat', 10, 7);
             $table->decimal('current_location_lng', 10, 7);
+            $table->string('location');
+            $table->decimal('price');
             $table->json('features')->nullable();
             $table->boolean('is_available')->default(true);
             $table->foreignId('category_id')->constrained();

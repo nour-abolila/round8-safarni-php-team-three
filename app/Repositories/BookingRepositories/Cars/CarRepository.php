@@ -14,7 +14,7 @@ class CarRepository
 
     public function find($id)
     {
-        return Car::find($id);
+        return Car::findOrFail($id);
     }
 
     public function searchCar($search): Collection
@@ -22,16 +22,10 @@ class CarRepository
         return Car::where('brand', 'like', "%$search%")
             ->orWhere('model', 'like', "%$search%")
             ->orWhere('model_year', $search)
-            ->orWhere('vehicle_class', 'like', "%$search%")
-            ->orWhere('seat_count', $search)
-            ->orWhere('door_count', $search)
+            ->orWhere('vehicle_class', $search)
             ->orWhere('fuel_type', 'like', "%$search%")
-            ->orWhere('transmission', 'like', "%$search%")
-            ->orWhere('luggage_capacity', $search)
-            ->orWhere('has_ac', $search)
             ->orWhere('location', 'like', "%$search%")
-            ->orWhere('features', 'like', "%$search%")
-            ->orWhere('is_available', $search)
+            ->Where('is_available', true)
             ->get();
     }
 }
