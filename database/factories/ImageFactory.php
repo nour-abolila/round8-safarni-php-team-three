@@ -15,6 +15,7 @@ class ImageFactory extends Factory
     {
        
         $types = ['App\Models\Hotel', 'App\Models\Room'];
+    
         $type = $this->faker->randomElement($types);
 
        
@@ -24,10 +25,8 @@ class ImageFactory extends Factory
             return []; 
         }
 
-       
-  
-       
             $hotelImages = [
+    
                 'https://picsum.photos/id/1015/640/480',
                 'https://picsum.photos/id/1016/640/480',
                 'https://picsum.photos/id/1020/640/480',
@@ -37,6 +36,7 @@ class ImageFactory extends Factory
 
     
             $roomImages = [
+    
                 'https://picsum.photos/id/1035/640/480',
                 'https://picsum.photos/id/1036/640/480',
                 'https://picsum.photos/id/1040/640/480',
@@ -46,10 +46,12 @@ class ImageFactory extends Factory
 
 
         $url = $type === Hotel::class
+
             ? $this->faker->randomElement($hotelImages)
             : $this->faker->randomElement($roomImages);
 
         return [
+    
             'url' => $url,
             'imageable_id' => $id,
             'imageable_type' => $type,

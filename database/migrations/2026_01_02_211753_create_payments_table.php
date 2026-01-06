@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('status');
             $table->string('transaction_id');
             $table->string('payment_method');
+            $table->string('provider')->nullable();
             $table->timestamps();
         });
     }

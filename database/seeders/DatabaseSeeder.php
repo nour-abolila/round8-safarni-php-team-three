@@ -34,6 +34,9 @@ class DatabaseSeeder extends Seeder
             CarSeeder::class,
             
             ReviewSeeder::class,
+
+            BookingSystemSeeder::class,
+
         ]);
     }
 }
