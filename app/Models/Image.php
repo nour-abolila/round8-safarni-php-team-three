@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Image extends Model
 {
-    public function images() {
-    return $this->morphMany(Image::class, 'imageable');
-}
+    protected $guarded = [];
 
+    public function imageable()
+    {
+        return $this->morphTo();
+    }
 }

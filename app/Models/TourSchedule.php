@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class TourSchedule extends Model
 {
-    public function schedules() {
-    return $this->hasMany(TourSchedule::class);
-}
+    protected $guarded = [];
 
+    public function tour()
+    {
+        return $this->belongsTo(Tour::class);
+    }
 }
