@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services\BookingServices;
+namespace App\Services\BookingServices\Flights;
 
 use App\Helper\ApiResponse;
 use App\Models\Airport;
 use App\Models\Booking;
 use App\Models\Flight;
 use App\Repositories\BookingRepositories\BookRepository;
-use App\Repositories\BookingRepositories\FlightRepositories;
+use App\Repositories\BookingRepositories\Flights\FlightRepositories;
 use App\DTOs\FlightSearchDTO;
 use App\Http\Resources\Flights\FlightResource;
 use DB;

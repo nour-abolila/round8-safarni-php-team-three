@@ -18,13 +18,13 @@ class DatabaseSeeder extends Seeder
 
 
             CategorySeeder::class,
-            
-            UserSeeder::class,       
-            
+
+            UserSeeder::class,
+
             HotelSeeder::class,
-            
+
             RoomSeeder::class,
-            
+
             ImageSeeder::class,
 
             FlightSeeder::class,
@@ -32,7 +32,9 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
 
             CarSeeder::class,
-            
+            AirportSeeder::class,
+            SeatSeeder::class,
+
             ReviewSeeder::class,
 
            
