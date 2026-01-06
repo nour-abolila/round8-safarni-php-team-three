@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use Carbon\Carbon;
@@ -45,5 +44,6 @@ class UserSeeder extends Seeder
             ],
         ];
         DB::table('users')->insert($users);
+
     }
 }

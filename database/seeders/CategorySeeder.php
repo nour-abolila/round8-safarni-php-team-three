@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -33,5 +32,6 @@ class CategorySeeder extends Seeder
         ];
 
         DB::table('categories')->insert($categories);
+
     }
 }

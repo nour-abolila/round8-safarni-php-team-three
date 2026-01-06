@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Services;
+use App\Models\Hotel;
+
+class HotelService {
+    
+    public function getHotels(?float $lat = null , ?float $lng = null){
+            
+         $query = Hotel::query()
+   
+         ->with('images')
+   
+         ->withAvg('reviews', 'rating')
+   
+         ->orderByDesc('reviews_avg_rating');
+
+            
+        if ($lat && $lng) {
+            
+            $query->selectRaw("
+            
+                hotels.*,
+            
+                ( 6371 * acos(
+              
+                cos(radians(?)) *
+              
+                cos(radians(lat)) *
+              
+                cos(radians(lng) - radians(?)) +
+              
+                sin(radians(?)) *
+              
+                sin(radians(lat))
+              
+                )) AS distance
+            
+                ", [$lat, $lng, $lat])
+            
+                ->orderBy('distance');
+        }
+
+        return $query->paginate(10);
+     }
+    public function getHotelDetails(int $id, int $roomsPerPage = 5)
+    {
+        $hotel = Hotel::with('images')
+        
+        ->withAvg('reviews', 'rating')
+        
+        ->findOrFail($id);
+
+       
+        $hotel->rooms = $hotel->rooms()
+        
+        ->where('is_available', true)
+        
+        ->paginate($roomsPerPage);
+
+        return $hotel;
+    }
+}

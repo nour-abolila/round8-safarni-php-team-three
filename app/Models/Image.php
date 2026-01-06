@@ -3,16 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Image extends Model
 {
-    protected $fillable = [
-        'imageable_id',
-        'imageable_type',
-        'url',
-    ];
 
-    // العلاقات
+  use HasFactory;  
     public function imageable()
     {
         return $this->morphTo();
