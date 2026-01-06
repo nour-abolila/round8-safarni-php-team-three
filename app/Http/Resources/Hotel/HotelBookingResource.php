@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Hotel;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -26,6 +26,8 @@ class HotelBookingResource extends JsonResource
            
                     'room_id'   => $detail->bookable_id,
            
+                     'hotel_id'  => $detail->bookable->hotel_id,
+
                     'adults'    => $detail->additional_info['adults'],
            
                     'teens'     => $detail->additional_info['teens'],

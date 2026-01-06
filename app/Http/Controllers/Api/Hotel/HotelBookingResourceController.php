@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Hotel;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\HotelBookingRequest;
-use App\Services\BookingServices\HotelBookingService;
-use App\Http\Resources\HotelBookingResource;
+use App\Http\Requests\Hotel\HotelBookingRequest;
+use App\Services\Hotel\HotelBookingService;
+use App\Http\Resources\Hotel\HotelBookingResource;
 use App\Helper\ApiResponse;
 
 class HotelBookingResourceController extends Controller

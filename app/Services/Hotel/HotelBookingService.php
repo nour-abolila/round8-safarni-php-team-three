@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\BookingServices;
+namespace App\Services\Hotel;
 
 use App\Models\Booking;
 use App\Models\BookingDetail;
