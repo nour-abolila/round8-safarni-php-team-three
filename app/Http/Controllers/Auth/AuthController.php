@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Helper\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
@@ -105,6 +106,19 @@ class AuthController extends Controller
 
         return ApiResponse::success([
             'message' => 'Password reset successfully',
+        ]);
+    }
+
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        $this->authService->changePassword(
+            $request->user(),
+            $request->current_password,
+            $request->new_password
+        );
+
+        return ApiResponse::success([
+            'message' => 'Password changed successfully',
         ]);
     }
 }
