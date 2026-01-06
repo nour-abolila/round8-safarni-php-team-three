@@ -13,11 +13,10 @@ class Booking extends Model
     protected $fillable = [
       
         'user_id',
+        'booking_type',
         'booking_status',
         'total_amount',
         'payment_status',
-        'payment_status',
-        'confirmed_at',
 
     ];
 
@@ -33,7 +32,7 @@ class Booking extends Model
 
     public function bookingDetails()
     {
-        return $this->hasOne(BookingDetail::class);
+        return $this->hasMany(BookingDetail::class);
     }
 
     public function payment()

@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
             
             ReviewSeeder::class,
 
-            BookingSystemSeeder::class,
+           
 
         ]);
     }
