@@ -51,27 +51,36 @@ class TourSeeder extends Seeder
         ];
 
         foreach ($tours as $tourData) {
-            $tour = Tour::create($tourData);
+            $tour = Tour::updateOrCreate(
+                ['slug' => $tourData['slug']],
+                $tourData
+            );
 
             // Add Images
-            $tour->images()->create([
-                'url' => 'https://placehold.co/600x400?text=' . urlencode($tour->title),
-            ]);
+            if (!$tour->images()->exists()) {
+                $tour->images()->create([
+                    'url' => 'https://placehold.co/600x400?text=' . urlencode($tour->title),
+                ]);
+            }
 
             // Add Schedule
-            TourSchedule::create([
-                'tour_id' => $tour->id,
-                'start_date' => now()->addDays(rand(5, 30)),
-                'capacity' => 20,
-                'available_slots' => 20,
-            ]);
+            if (!$tour->schedules()->exists()) {
+                TourSchedule::create([
+                    'tour_id' => $tour->id,
+                    'start_date' => now()->addDays(10),
+                    'capacity' => 20,
+                    'available_slots' => 20,
+                ]);
+            }
 
             // Add Review
-            $tour->reviews()->create([
-                'user_id' => $user->id,
-                'rating' => rand(4, 5),
-                'status' => 'approved',
-            ]);
+            if (!$tour->reviews()->exists()) {
+                $tour->reviews()->create([
+                    'user_id' => $user->id,
+                    'rating' => 5,
+                    'status' => 'approved',
+                ]);
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Favorite;
 use App\Models\Tour;
 use Illuminate\Http\Request;

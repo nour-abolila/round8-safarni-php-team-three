@@ -3,9 +3,9 @@
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\TourController;
 use App\Http\Controllers\Api\FavoriteController;
-use App\Http\Controllers\BookingController;
 use App\Models\User;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\BookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\HotelResourceController;
@@ -53,4 +53,12 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::apiResource('hotel', HotelResourceController::class) ->only(['index', 'show']);
 Route::apiResource('room', RoomResourceController::class) ->only(['show']);
 
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/search-flights', [BookingController::class, 'searchFlights']);
+
+    Route::get('/flight-seats/{id}', [BookingController::class, 'getFlightSeat']);
+
+    Route::post('/book-flight/{flightId}', [BookingController::class, 'bookFlight']);
+});
 

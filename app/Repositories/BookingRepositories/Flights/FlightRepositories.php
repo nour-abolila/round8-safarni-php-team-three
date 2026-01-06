@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\BookingRepositories;
+namespace App\Repositories\BookingRepositories\Flights;
 
 use App\Models\Flight;
 
