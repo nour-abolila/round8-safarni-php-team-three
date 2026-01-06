@@ -21,11 +21,16 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
-<<<<<<< HEAD
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/change-password', [AuthController::class, 'changePassword']);
+});
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/search-flights', [BookingController::class, 'searchFlights']);
 
@@ -34,5 +39,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/book-flight/{flightId}', [BookingController::class, 'bookFlight']);
 });
 
-=======
->>>>>>> 7bfc582f8d7e77232b73f9e204f86c63ee2ed8da
+

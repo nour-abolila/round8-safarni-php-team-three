@@ -70,4 +70,18 @@ class AuthService
         // حذف كل التوكنز القديمة
         $user->tokens()->delete();
     }
+
+    public function changePassword($user, string $currentPassword, string $newPassword): void
+    {
+        if (!Hash::check($currentPassword, $user->password)) {
+            throw new \Exception('Current password is incorrect.');
+        }
+
+        $user->update([
+            'password' => Hash::make($newPassword),
+        ]);
+
+        // حذف كل التوكنز القديمة
+        $user->tokens()->delete();
+    }
 }
