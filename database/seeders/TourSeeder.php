@@ -77,7 +77,8 @@ class TourSeeder extends Seeder
             if (!$tour->reviews()->exists()) {
                 $tour->reviews()->create([
                     'user_id' => $user->id,
-                    'rating' => 5,
+                    'comment' => 'Great tour!',
+                    'rating' => rand(4, 5),
                     'status' => 'approved',
                 ]);
             }
