@@ -3,139 +3,48 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Tour;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Services\TourService;
+use App\Http\Resources\Tours\TourCardResource;
+use App\Http\Resources\Tours\TourDetailResource;
+use App\Helper\ApiResponse;
+use App\Http\Requests\Tours\CompareToursRequest;
 
 class TourController extends Controller
 {
+    protected TourService $service;
+
+    public function __construct(TourService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
-        $tours = Tour::with(['images', 'reviews', 'schedules'])->get()->map(function ($tour) {
-            return [
-                'id' => $tour->id,
-                'title' => $tour->title,
-                'slug' => $tour->slug,
-                'duration' => $tour->duration,
-                'visit_season' => $tour->visit_season,
-                'activities' => $tour->activities,
-                'recommendation' => $tour->recommendation,
-                'image' => $tour->images->first()?->url,
-                'rating_average' => round($tour->reviews->avg('rating'), 1),
-                'reviews_count' => $tour->reviews->count(),
-                // Assuming a default price or calculation since it's missing in DB
-                'price' => 150 * $tour->duration,
-            ];
-        });
-
-        return response()->json(['data' => $tours]);
+        $tours = $this->service->index();
+        return ApiResponse::success(TourCardResource::collection($tours));
     }
 
     public function show($id)
     {
-        $tour = Tour::with(['images', 'reviews.user', 'schedules'])->findOrFail($id);
-
-        $data = [
-            'id' => $tour->id,
-            'title' => $tour->title,
-            'slug' => $tour->slug,
-            'duration' => $tour->duration,
-            'visit_season' => $tour->visit_season,
-            'activities' => $tour->activities,
-            'recommendation' => $tour->recommendation,
-            'images' => $tour->images->pluck('url'),
-            'reviews' => $tour->reviews->map(function ($review) {
-                return [
-                    'user' => $review->user->full_name,
-                    'rating' => $review->rating,
-                    'comment' => $review->comment ?? '', // Assuming comment might be in additional fields or missing
-                    'created_at' => $review->created_at,
-                ];
-            }),
-            'rating_average' => round($tour->reviews->avg('rating'), 1),
-            'reviews_count' => $tour->reviews->count(),
-            'schedules' => $tour->schedules,
-            'price' => 150 * $tour->duration,
-        ];
-
-        return response()->json(['data' => $data]);
+        $tour = $this->service->show((int) $id);
+        return ApiResponse::success(new TourDetailResource($tour));
     }
 
-    public function compare(Request $request)
+    public function compare(CompareToursRequest $request)
     {
-        $request->validate([
-            'tour_ids' => 'required|array|min:2|max:2',
-            'tour_ids.*' => 'exists:tours,id',
-        ]);
-
-        $tours = Tour::with(['images', 'reviews', 'schedules'])->whereIn('id', $request->tour_ids)->get()->map(function ($tour) {
-            return [
-                'id' => $tour->id,
-                'title' => $tour->title,
-                'duration' => $tour->duration,
-                'visit_season' => $tour->visit_season,
-                'activities' => $tour->activities,
-                'rating_average' => round($tour->reviews->avg('rating'), 1),
-                'price' => 150 * $tour->duration,
-                'image' => $tour->images->first()?->url,
-            ];
-        });
-
-        return response()->json(['data' => $tours]);
+        $tours = $this->service->compare($request->input('tour_ids'));
+        return ApiResponse::success(TourCardResource::collection($tours));
     }
 
     public function recommended()
     {
-        $tours = Tour::with(['images', 'reviews'])
-            ->withAvg('reviews', 'rating')
-            ->orderByDesc('reviews_avg_rating')
-            ->paginate(4);
-
-        $tours->getCollection()->transform(function ($tour) {
-            return [
-                'id' => $tour->id,
-                'title' => $tour->title,
-                'slug' => $tour->slug,
-                'duration' => $tour->duration,
-                'visit_season' => $tour->visit_season,
-                'activities' => $tour->activities,
-                'recommendation' => $tour->recommendation,
-                'image' => $tour->images->first()?->url,
-                'rating_average' => round($tour->reviews_avg_rating, 1),
-                'reviews_count' => $tour->reviews->count(),
-                'price' => 150 * $tour->duration,
-            ];
-        });
-
-        return response()->json($tours);
+        $tours = $this->service->recommended();
+        return ApiResponse::success(TourCardResource::collection($tours));
     }
 
     public function available()
     {
-        $tours = Tour::whereHas('schedules', function ($q) {
-                $q->where('start_date', '>', now())
-                  ->where('available_slots', '>', 0);
-            })
-            ->with(['images', 'reviews'])
-            ->withAvg('reviews', 'rating')
-            ->paginate(4);
-
-        $tours->getCollection()->transform(function ($tour) {
-            return [
-                'id' => $tour->id,
-                'title' => $tour->title,
-                'slug' => $tour->slug,
-                'duration' => $tour->duration,
-                'visit_season' => $tour->visit_season,
-                'activities' => $tour->activities,
-                'recommendation' => $tour->recommendation,
-                'image' => $tour->images->first()?->url,
-                'rating_average' => round($tour->reviews_avg_rating, 1),
-                'reviews_count' => $tour->reviews->count(),
-                'price' => 150 * $tour->duration,
-            ];
-        });
-
-        return response()->json($tours);
+        $tours = $this->service->available();
+        return ApiResponse::success(TourCardResource::collection($tours));
     }
 }
