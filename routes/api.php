@@ -19,18 +19,17 @@ Route::get('/user', function (Request $request) {
 
 Route::apiResource('hotel', HotelResourceController::class)->only(['index', 'show']);
 Route::apiResource('room', RoomResourceController::class)->only(['show']);
-//! test login
+
+//! login
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::apiResource('hotel', HotelResourceController::class)->only(['index', 'show']);
+Route::apiResource('room', RoomResourceController::class)->only(['show']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 
-
-
-
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
-
-
 
 
 //! tours
