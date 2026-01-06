@@ -8,6 +8,11 @@ class Payment extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'amount' => 'decimal:2',
+    ];
+
+    // العلاقات
     public function booking()
     {
         return $this->belongsTo(Booking::class);

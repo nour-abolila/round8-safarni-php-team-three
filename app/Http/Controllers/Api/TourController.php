@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Tour;
 use Illuminate\Http\Request;
@@ -23,7 +23,7 @@ class TourController extends Controller
                 'rating_average' => round($tour->reviews->avg('rating'), 1),
                 'reviews_count' => $tour->reviews->count(),
                 // Assuming a default price or calculation since it's missing in DB
-                'price' => 150 * $tour->duration, 
+                'price' => 150 * $tour->duration,
             ];
         });
 
@@ -81,5 +81,60 @@ class TourController extends Controller
         });
 
         return response()->json(['data' => $tours]);
+    }
+
+    public function recommended()
+    {
+        $tours = Tour::with(['images', 'reviews'])
+            ->withAvg('reviews', 'rating')
+            ->orderByDesc('reviews_avg_rating')
+            ->paginate(4);
+
+        $tours->getCollection()->transform(function ($tour) {
+            return [
+                'id' => $tour->id,
+                'title' => $tour->title,
+                'slug' => $tour->slug,
+                'duration' => $tour->duration,
+                'visit_season' => $tour->visit_season,
+                'activities' => $tour->activities,
+                'recommendation' => $tour->recommendation,
+                'image' => $tour->images->first()?->url,
+                'rating_average' => round($tour->reviews_avg_rating, 1),
+                'reviews_count' => $tour->reviews->count(),
+                'price' => 150 * $tour->duration,
+            ];
+        });
+
+        return response()->json($tours);
+    }
+
+    public function available()
+    {
+        $tours = Tour::whereHas('schedules', function ($q) {
+                $q->where('start_date', '>', now())
+                  ->where('available_slots', '>', 0);
+            })
+            ->with(['images', 'reviews'])
+            ->withAvg('reviews', 'rating')
+            ->paginate(4);
+
+        $tours->getCollection()->transform(function ($tour) {
+            return [
+                'id' => $tour->id,
+                'title' => $tour->title,
+                'slug' => $tour->slug,
+                'duration' => $tour->duration,
+                'visit_season' => $tour->visit_season,
+                'activities' => $tour->activities,
+                'recommendation' => $tour->recommendation,
+                'image' => $tour->images->first()?->url,
+                'rating_average' => round($tour->reviews_avg_rating, 1),
+                'reviews_count' => $tour->reviews->count(),
+                'price' => 150 * $tour->duration,
+            ];
+        });
+
+        return response()->json($tours);
     }
 }

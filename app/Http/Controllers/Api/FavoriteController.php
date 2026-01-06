@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Favorite;
 use App\Models\Tour;
@@ -12,7 +12,7 @@ class FavoriteController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
+
         $favorites = $user->favorites()
             ->where('favorable_type', Tour::class)
             ->with(['favorable.images', 'favorable.reviews'])
@@ -20,7 +20,7 @@ class FavoriteController extends Controller
             ->map(function ($fav) {
                 $tour = $fav->favorable;
                 if (!$tour) return null;
-                
+
                 return [
                     'id' => $tour->id,
                     'title' => $tour->title,
@@ -40,7 +40,7 @@ class FavoriteController extends Controller
         ]);
 
         $user = Auth::user();
-        
+
         $favorite = $user->favorites()->firstOrCreate([
             'favorable_type' => Tour::class,
             'favorable_id' => $request->tour_id,
@@ -52,7 +52,7 @@ class FavoriteController extends Controller
     public function destroy($tourId)
     {
         $user = Auth::user();
-        
+
         $user->favorites()->where('favorable_type', Tour::class)
             ->where('favorable_id', $tourId)
             ->delete();

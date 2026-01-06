@@ -8,6 +8,11 @@ class TourSchedule extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'start_date' => 'date',
+    ];
+
+    // العلاقات
     public function tour()
     {
         return $this->belongsTo(Tour::class);

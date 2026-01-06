@@ -10,8 +10,10 @@ class BookingDetail extends Model
 
     protected $casts = [
         'additional_info' => 'array',
+        'price_paid' => 'decimal:2',
     ];
 
+    // العلاقات
     public function booking()
     {
         return $this->belongsTo(Booking::class);

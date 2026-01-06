@@ -8,6 +8,7 @@ class Favorite extends Model
 {
     protected $guarded = [];
 
+    // العلاقات
     public function user()
     {
         return $this->belongsTo(User::class);
