@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('seat_number');
             $table->string('status');
             $table->timestamp('lock_expiry')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade')->nullable();
             $table->timestamps();
         });
     }

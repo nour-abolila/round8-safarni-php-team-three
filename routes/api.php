@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\BookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\HotelResourceController;
@@ -24,3 +25,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
+<<<<<<< HEAD
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/search-flights', [BookingController::class, 'searchFlights']);
+
+    Route::get('/flight-seats/{id}', [BookingController::class, 'getFlightSeat']);
+
+    Route::post('/book-flight/{flightId}', [BookingController::class, 'bookFlight']);
+});
+
+=======
+>>>>>>> 7bfc582f8d7e77232b73f9e204f86c63ee2ed8da
