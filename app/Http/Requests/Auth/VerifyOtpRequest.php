@@ -23,7 +23,7 @@ class VerifyOtpRequest extends FormRequest
     {
         return [
             'user_id' => 'required|exists:users,id',
-            'otp'     => 'required|digits:6',
+            'otp'     => 'required|digits:4',
         ];
     }
 }
