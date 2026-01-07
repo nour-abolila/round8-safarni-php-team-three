@@ -18,6 +18,8 @@ class HotelReviewResource extends JsonResource
             'rating'    => $this->rating,
           
             'status'    => $this->status,
+
+             'comment'   => $this->comment,
           
             'user'      => [
           

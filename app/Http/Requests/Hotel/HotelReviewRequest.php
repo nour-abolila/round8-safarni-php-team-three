@@ -24,6 +24,7 @@ class HotelReviewRequest extends FormRequest
           
             'rating'   => ['required', 'integer', 'between:1,5'],
           
+            'comment'  => ['nullable', 'string'],
         ];
     }
 }

@@ -56,6 +56,8 @@ class HotelReviewService
             'rating'           => $data['rating'],
 
             'status'           => 'pending',
+
+            'comment'          => $data['comment'] ?? null,
         ]);
     }
 

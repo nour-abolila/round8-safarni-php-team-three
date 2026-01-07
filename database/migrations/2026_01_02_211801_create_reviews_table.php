@@ -17,6 +17,7 @@ return new class extends Migration
             $table->morphs('reviewable');
             $table->integer('rating');
             $table->string('status');
+            $table->text('comment');
             $table->timestamps();
         });
     }

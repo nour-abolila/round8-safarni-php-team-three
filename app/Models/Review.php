@@ -15,6 +15,8 @@ class Review extends Model
         'reviewable_type',
         'rating',
         'status',
+        'comment'
+
     ];
 
     protected $casts = [
