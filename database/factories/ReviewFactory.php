@@ -25,6 +25,8 @@ class ReviewFactory extends Factory
 
             'reviewable_type' => 'App\Models\Hotel',
 
+            'comment' => $this->faker->sentence,
+
             'rating' => $this->faker->numberBetween(1, 5),
 
             'status' => $this->faker->randomElement(['approved', 'pending']),

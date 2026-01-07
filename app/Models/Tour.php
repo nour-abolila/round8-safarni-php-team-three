@@ -6,14 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tour extends Model
 {
-    protected $fillable = [
-        'title',
-        'slug',
-        'duration',
-        'recommendation',
-        'visit_season',
-        'activities',
-    ];
+    protected $guarded = [];
 
     protected $casts = [
         'activities' => 'array',
@@ -42,6 +35,6 @@ class Tour extends Model
 
     public function favorites()
     {
-        return $this->morphMany(Favorite::class, 'favoritable');
+        return $this->morphMany(Favorite::class, 'favorable');
     }
 }

@@ -6,14 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BookingDetail extends Model
 {
-    protected $fillable = [
-        'booking_id',
-        'bookable_id',
-        'bookable_type',
-        'quantity',
-        'price_paid',
-        'additional_info',
-    ];
+    protected $guarded = [];
 
     protected $casts = [
         'additional_info' => 'array',

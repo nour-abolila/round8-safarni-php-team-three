@@ -6,13 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
-    protected $fillable = [
-        'booking_id',
-        'amount',
-        'status',
-        'transaction_id',
-        'payment_method',
-    ];
+    protected $guarded = [];
 
     protected $casts = [
         'amount' => 'decimal:2',

@@ -6,12 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
-    protected $fillable = [
-        'user_id',
-        'booking_status',
-        'total_amount',
-        'payment_status',
-    ];
+    protected $guarded = [];
 
     protected $casts = [
         'total_amount' => 'decimal:2',
@@ -23,9 +18,14 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function details()
+    {
+        return $this->hasMany(BookingDetail::class);
+    }
+
     public function bookingDetails()
     {
-        return $this->hasOne(BookingDetail::class);
+        return $this->hasMany(BookingDetail::class);
     }
 
     public function payment()
