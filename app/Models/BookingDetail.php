@@ -15,7 +15,6 @@ class BookingDetail extends Model
         'price_paid',
         'additional_info',
     ];
-    protected $guarded = [];
 
     protected $casts = [
         'additional_info' => 'array',

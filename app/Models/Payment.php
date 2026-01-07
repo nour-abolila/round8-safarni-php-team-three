@@ -14,7 +14,6 @@ class Payment extends Model
         'transaction_id',
         'payment_method',
     ];
-    protected $guarded = [];
 
     protected $casts = [
         'amount' => 'decimal:2',
