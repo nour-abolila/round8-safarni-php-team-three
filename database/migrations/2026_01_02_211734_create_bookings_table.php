@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
+            $table->string('booking_type');
             $table->string('booking_status');
             $table->decimal('total_amount', 10, 2);
-            $table->string('payment_status');
+            $table->string('payment_status')->default('unpaid');
             $table->timestamps();
         });
     }

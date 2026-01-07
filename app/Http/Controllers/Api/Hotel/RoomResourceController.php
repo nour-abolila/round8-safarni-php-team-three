@@ -1,9 +1,9 @@
 <?php
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Hotel;
 
 use App\Http\Controllers\Controller;
 use App\Services\RoomService;
-use App\Http\Resources\RoomDetailsResource;
+use App\Http\Resources\Hotel\RoomDetailsResource;
 use App\Helper\ApiResponse;
 
 class RoomResourceController extends Controller

@@ -16,26 +16,24 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
 
-
             CategorySeeder::class,
-
             UserSeeder::class,
-
             HotelSeeder::class,
-
             RoomSeeder::class,
-
             ImageSeeder::class,
-
             FlightSeeder::class,
-
             RoleSeeder::class,
-
             CarSeeder::class,
             AirportSeeder::class,
             SeatSeeder::class,
-
             ReviewSeeder::class,
+
+           
+
+        ]);
+
+        $this->call([
+            TourSeeder::class,
         ]);
     }
 }

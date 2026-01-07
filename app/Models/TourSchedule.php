@@ -6,12 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TourSchedule extends Model
 {
-    protected $fillable = [
-        'tour_id',
-        'start_date',
-        'capacity',
-        'available_slots',
-    ];
+    protected $guarded = [];
 
     protected $casts = [
         'start_date' => 'date',

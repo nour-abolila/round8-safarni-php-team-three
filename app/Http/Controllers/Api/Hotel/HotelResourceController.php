@@ -1,10 +1,10 @@
 <?php
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Hotel;
 
 use App\Http\Controllers\Controller;
 use App\Services\HotelService;
-use App\Http\Resources\HotelResource;
-use App\Http\Resources\HotelDetailsResource;
+use App\Http\Resources\Hotel\HotelResource;
+use App\Http\Resources\Hotel\HotelDetailsResource;
 use App\Helper\ApiResponse;
 use Illuminate\Http\Request;
 

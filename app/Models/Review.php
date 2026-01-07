@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
     use HasFactory;
+
     
     protected $fillable = [
         'user_id',
@@ -15,6 +16,8 @@ class Review extends Model
         'reviewable_type',
         'rating',
         'status',
+        'comment'
+
     ];
 
     protected $casts = [
@@ -22,13 +25,13 @@ class Review extends Model
     ];
 
     // العلاقات
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function reviewable()
     {
         return $this->morphTo();
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
