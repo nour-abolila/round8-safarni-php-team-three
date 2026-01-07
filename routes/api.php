@@ -60,9 +60,14 @@ Route::apiResource('hotel', HotelResourceController::class) ->only(['index', 'sh
 Route::apiResource('room', RoomResourceController::class) ->only(['show']);
 
 
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/change-password', [AuthController::class, 'changePassword']);
+    Route::get('/profile', [AuthController::class, 'show']);
+    Route::put('/profile', [AuthController::class, 'update']);
     Route::post('/search-flights', [BookingController::class, 'searchFlights']);
     Route::get('/flight-seats/{id}', [BookingController::class, 'getFlightSeat']);
     Route::post('/book-flight/{flightId}', [BookingController::class, 'bookFlight']);

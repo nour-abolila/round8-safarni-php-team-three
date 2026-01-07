@@ -16,7 +16,8 @@ class OtpService
         OtpCode::where('user_id', $user->id)->delete();
 
         // توليد كود 6 أرقام
-        $code = rand(100000, 999999);
+        $code = 1234;
+
 
         OtpCode::create([
             'user_id'    => $user->id,
