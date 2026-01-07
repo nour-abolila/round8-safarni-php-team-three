@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests;
+
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class VerifyOtpRequest extends FormRequest
+class UpdateProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +24,14 @@ class VerifyOtpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|exists:users,id',
-            'otp'     => 'required|digits:4',
+            'full_name' => ['sometimes', 'string', 'max:255'],
+            'email' => [
+                'sometimes',
+                'email',
+                'max:255',
+                'unique:users,email,' .  Auth::id(),
+            ],
+            'mobile' => ['sometimes', 'string', 'max:20'],
         ];
     }
 }

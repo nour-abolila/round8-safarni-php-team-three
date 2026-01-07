@@ -9,6 +9,7 @@ use App\Models\BookingDetail;
 use App\Models\Payment;
 class Booking extends Model
 {
+
      use HasFactory;
     protected $fillable = [
       
@@ -19,6 +20,7 @@ class Booking extends Model
         'payment_status',
 
     ];
+    protected $guarded = [];
 
     protected $casts = [
         'total_amount' => 'decimal:2',
@@ -30,9 +32,14 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function details()
+    {
+        return $this->hasMany(BookingDetail::class);
+    }
+
     public function bookingDetails()
     {
-        return $this->hasOne(BookingDetail::class);
+        return $this->hasMany(BookingDetail::class);
     }
 
     public function payment()

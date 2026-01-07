@@ -9,17 +9,20 @@ use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Requests\Auth\VerifyOtpRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Resources\UserResource;
 use App\Mail\OtpMail;
 use App\Models\User;
 use App\Services\Auth\AuthService;
 use App\Services\Auth\OtpService;
+use App\Services\User\ProfileService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
-    public function __construct(protected AuthService $authService, protected OtpService $otpService) {}
+    public function __construct(protected AuthService $authService, protected OtpService $otpService, protected ProfileService $profileService) {}
 
     public function register(RegisterRequest $request)
     {
@@ -120,5 +123,24 @@ class AuthController extends Controller
         return ApiResponse::success([
             'message' => 'Password changed successfully',
         ]);
+    }
+
+    public function show()
+    {
+        return ApiResponse::success(
+            new UserResource(Auth::user())
+        );
+    }
+
+    public function update(UpdateProfileRequest $request)
+    {
+        $user = $this->profileService->update(
+            Auth::user(),
+            $request->validated()
+        );
+
+        return ApiResponse::success(
+            new UserResource($user)
+        );
     }
 }

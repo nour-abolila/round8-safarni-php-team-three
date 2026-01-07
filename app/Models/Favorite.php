@@ -6,11 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Favorite extends Model
 {
-    protected $fillable = [
-        'user_id',
-        'favoritable_id',
-        'favoritable_type',
-    ];
+    protected $guarded = [];
 
     // العلاقات
     public function user()
@@ -18,7 +14,7 @@ class Favorite extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function favoritable()
+    public function favorable()
     {
         return $this->morphTo();
     }
