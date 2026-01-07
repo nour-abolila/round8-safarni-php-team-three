@@ -76,10 +76,7 @@ class CarService
             'bookable_type' => get_class($car),
             'quantity' => $data['quantity'],
             'price_paid' => $car->price,
-            'additional_info' => [
-                'begin_date' => $data['begin_date'],
-                'end_date' => $data['end_date'],
-            ],
+            'additional_info' => [],
         ]);
     }
 }
