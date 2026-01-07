@@ -3,9 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Payment extends Model
 {
+    use HasFactory;
+    protected $fillable = [
+        'booking_id',
+        'amount',
+        'status',
+        'transaction_id',
+        'payment_method',
+    ];
     protected $guarded = [];
 
     protected $casts = [

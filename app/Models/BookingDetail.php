@@ -3,9 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 class BookingDetail extends Model
 {
+    use HasFactory;
+    protected $fillable = [
+        'booking_id',
+        'bookable_id',
+        'bookable_type',
+        'quantity',
+        'price_paid',
+        'additional_info',
+    ];
     protected $guarded = [];
 
     protected $casts = [
