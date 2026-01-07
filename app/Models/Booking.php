@@ -20,8 +20,6 @@ class Booking extends Model
         'payment_status',
 
     ];
-    protected $guarded = [];
-
     protected $casts = [
         'total_amount' => 'decimal:2',
     ];
