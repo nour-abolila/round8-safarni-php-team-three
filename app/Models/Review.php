@@ -19,7 +19,6 @@ class Review extends Model
         'comment'
 
     ];
-    protected $guarded = [];
 
     protected $casts = [
         'rating' => 'integer',

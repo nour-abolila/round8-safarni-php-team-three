@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('comment')->nullable();
             $table->integer('rating');
             $table->string('status');
-            $table->text('comment');
             $table->timestamps();
         });
     }
