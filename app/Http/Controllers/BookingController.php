@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\DTOs\FlightSearchDTO;
 use App\Helper\ApiResponse;
+use App\Http\Requests\Car\bookingCarRequest;
 use App\Http\Requests\searchFlightRequest;
 use App\Http\Requests\SeatFlightRequest;
 use App\Repositories\BookingRepositories\FlightRepositories;
 use App\Http\Resources\Flights\FlightSeatResource;
-use Illuminate\Http\Request;
+use App\Services\BookingServices\Cars\CarService;
 use App\Services\BookingServices\FlightServices;
+use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\BookingDetail;
 use App\Models\Payment;
@@ -23,7 +25,8 @@ class BookingController extends Controller
 {
     public function __construct(
         protected FlightServices $flightServices,
-        protected FlightRepositories $flightRepositories
+        protected FlightRepositories $flightRepositories,
+        protected CarService $carServices
         )
     {}
 
@@ -49,7 +52,7 @@ class BookingController extends Controller
 
         return ApiResponse::success(
             data: [
-                'flight_seats' => FlightSeatResource::collection($flight->seats),
+                'flight_seats' => FlightSeatResource::collection($flight->flightSeats),
             ],
             message: 'تم جلب مقاعد الرحلة بنجاح'
         );
@@ -60,7 +63,16 @@ class BookingController extends Controller
         return $this->flightServices->bookingFlight($flightId,$request->validated('seat_ids'));
     }
 
+    public function bookCar(bookingCarRequest $request)
+    {
+        return $this->carServices->bookCar($request->validated());
+    }
 
+    public function searchCar(Request $request)
+    {
+        $search = $request->input('search');
+        return $this->carServices->searchCars($search);
+    }
     public function store(Request $request)
     {
         $request->validate([

@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\FavoriteController;
 use App\Models\User;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\Payment\PaymentController;
+use App\Http\Controllers\Payment\PaymentWebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Hotel\HotelResourceController;
@@ -19,7 +21,13 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::apiResource('hotel', HotelResourceController::class) ->only(['index', 'show']); 
+Route::apiResource('hotel', HotelResourceController::class) ->only(['index', 'show']);
+
+Route::apiResource('room', RoomResourceController::class) ->only(['show']);
+
+Route::apiResource('hotel', HotelResourceController::class)->only(['index', 'show']);
+Route::apiResource('room', RoomResourceController::class)->only(['show']);
+Route::apiResource('hotel', HotelResourceController::class) ->only(['index', 'show']);
 
 Route::apiResource('room', RoomResourceController::class) ->only(['show']);
 
@@ -27,12 +35,12 @@ Route::apiResource('room', RoomResourceController::class) ->only(['show']);
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('hotel-bookings', HotelBookingResourceController::class)
-    
-    ->only(['index', 'store']); 
+
+    ->only(['index', 'store']);
 
     Route::apiResource('hotel-review', HotelReviewResourceController::class)
-    
-    ->only(['index', 'store']); 
+
+    ->only(['index', 'store']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -87,7 +95,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [AuthController::class, 'show']);
     Route::put('/profile', [AuthController::class, 'update']);
     Route::post('/search-flights', [BookingController::class, 'searchFlights']);
+
+    Route::get('/flight-seats/{id}', action: [BookingController::class, 'getFlightSeat']);
+
     Route::get('/flight-seats/{id}', [BookingController::class, 'getFlightSeat']);
     Route::post('/book-flight/{flightId}', [BookingController::class, 'bookFlight']);
+
+    Route::post('/book-car', [BookingController::class, 'bookCar']);
+
+    Route::post('search-car', [BookingController::class, 'searchCar']);
+
+    Route::post('create-payment-intent/{bookingId}', [PaymentController::class, 'makePayment']);
 });
+
+Route::post('webhook/stripe', [PaymentWebhookController::class, 'handle']);
+
 

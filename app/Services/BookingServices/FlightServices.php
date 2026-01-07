@@ -23,8 +23,16 @@ public function __construct(
 
     public function search(FlightSearchDTO $searchDTO): Collection|array
     {
-        $airpotr_form = Airport::where('city', $searchDTO->from)->first();
-        $airpotr_to = Airport::where('city', $searchDTO->to)->first();
+        $airpotr_form = Airport::where('city', $searchDTO->from)->firstOrFail();
+
+        if (!$airpotr_form) {
+            throw new Exception('Flights not found from ' . $searchDTO->from);
+        }
+        $airpotr_to = Airport::where('city', $searchDTO->to)->firstOrFail();
+
+        if (!$airpotr_to) {
+            throw new Exception('Flights not found to ' . $searchDTO->to);
+        }
 
         $criteria = [
             'from' => $airpotr_form->airport_code,

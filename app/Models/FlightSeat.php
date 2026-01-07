@@ -27,7 +27,10 @@ class FlightSeat extends Model
     {
         return $this->belongsTo(User::class);
     }
-
+    public function who_booked($id)
+    {
+        return $this->user_id == $id && $this->status == 'booked';
+    }
     public function isAvailable(): bool
     {
         return $this->status === 'available';
