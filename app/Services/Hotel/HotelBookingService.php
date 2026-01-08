@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\BookingDetail;
 use App\Models\Room;
 use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
 
 class HotelBookingService
 {
@@ -20,6 +21,29 @@ class HotelBookingService
         $nights   = $checkIn->diffInDays($checkOut);
 
         $totalAmount = $room->price_per_night * $nights;
+        
+
+        $existingBooking = Booking::where('user_id', $userId)
+     
+        ->where('booking_status', 'pending') 
+     
+        ->whereHas('bookingDetails', function($q) use ($room) {
+     
+            $q->where('bookable_id', $room->id)
+     
+            ->where('bookable_type', Room::class);
+        })
+     
+        ->first();
+
+       if ($existingBooking) {
+   
+        throw ValidationException::withMessages([
+           
+            'room' => ['This room is already booked by you.']
+        ]);
+       
+    }
 
         $booking = Booking::create([
       
