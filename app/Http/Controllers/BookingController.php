@@ -7,6 +7,8 @@ use App\Helper\ApiResponse;
 use App\Http\Requests\Car\bookingCarRequest;
 use App\Http\Requests\searchFlightRequest;
 use App\Http\Requests\SeatFlightRequest;
+use App\Http\Resources\Bookings\BookingResource;
+use App\Repositories\BookingRepositories\BookRepository;
 use App\Repositories\BookingRepositories\FlightRepositories;
 use App\Http\Resources\Flights\FlightSeatResource;
 use App\Services\BookingServices\Cars\CarService;
@@ -26,7 +28,8 @@ class BookingController extends Controller
     public function __construct(
         protected FlightServices $flightServices,
         protected FlightRepositories $flightRepositories,
-        protected CarService $carServices
+        protected CarService $carServices,
+        protected BookRepository $bookRepository
         )
     {}
 
@@ -74,9 +77,13 @@ class BookingController extends Controller
         return $this->carServices->searchCars($search);
     }
 
-    public function getAllBookings()
+    public function getUserBookings($type)
     {
-        return ;
+        $bookings = $this->bookRepository->getUserBookings($type);
+        return ApiResponse::success(
+            data: BookingResource::collection($bookings),
+            message: 'User Bookings are :'
+        );
     }
     public function store(Request $request)
     {

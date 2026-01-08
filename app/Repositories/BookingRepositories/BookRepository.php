@@ -28,10 +28,13 @@ class BookRepository
         return Booking::findOrFail($id);
     }
 
-    public function getAllBookings($status)
+    public function getUserBookings($type)
     {
-        return Booking::with('details')
-        ->where('booking_status',$status)
-        ->get();
+        return Booking::with('details','user','payment')
+            ->whereHas('details', function ($query) use ($type) {
+                $query->where('bookable_type', "App\\Models\\{$type}");
+            })
+            ->where('user_id',auth()->user()->id)
+            ->get();
     }
 }

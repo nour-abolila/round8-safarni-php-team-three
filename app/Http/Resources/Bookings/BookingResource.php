@@ -14,12 +14,19 @@ class BookingResource extends JsonResource
      */
     public function toArray(Request $request)
     {
-        return
-        [
+        $firstDetail = $this->details->first();
+
+        return [
             'id' => $this->id,
-            'bookable_type' => optional($this->details->first())->bookable_type,
+            'payment_status' => $this->payment_status,
             'booking_status' => $this->booking_status,
-            'total_amount' => $this->total_amount
+            'total_amount' => $this->total_amount,
+            'bookable_type' => optional($firstDetail)->bookable_type,
+            'user_name' => $this->user->full_name,
+            'user_email' => $this->user->email,
+            'quantity' => optional($firstDetail)->quantity,
+            'price_paid' => optional($firstDetail)->price_paid,
+            'additional_info' => optional($firstDetail)->additional_info,
         ];
     }
 }
