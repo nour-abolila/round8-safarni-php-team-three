@@ -14,7 +14,7 @@ class ApiResponse
             'message' => $message,
         ];
 
-        if ($data instanceof JsonResource) {
+        if ($data instanceof JsonResource || $data instanceof \Illuminate\Http\Resources\Json\AnonymousResourceCollection) {
             return $data->additional($response)->response()->setStatusCode($statusCode);
         }
 
