@@ -73,6 +73,11 @@ class BookingController extends Controller
         $search = $request->input('search');
         return $this->carServices->searchCars($search);
     }
+
+    public function getAllBookings()
+    {
+        return ;
+    }
     public function store(Request $request)
     {
         $request->validate([
