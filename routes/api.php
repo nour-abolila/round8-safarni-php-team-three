@@ -103,6 +103,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('search-car', [BookingController::class, 'searchCar']);
 
     Route::post('create-payment-intent/{bookingId}', [PaymentController::class, 'makePayment']);
+
+    Route::get('get-user-bookings/{type}',[BookingController::class,'getUserBookings']);
 });
 
 Route::post('webhook/stripe', [PaymentWebhookController::class, 'handle']);
