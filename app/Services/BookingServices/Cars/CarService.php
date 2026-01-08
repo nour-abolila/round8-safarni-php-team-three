@@ -35,6 +35,7 @@ class CarService
             DB::commit();
 
             return ApiResponse::success([
+                'car'=> new CarResource($car) ,
                 'booking' => new BookingResource($booking)
             ],
             message: 'Car booked successfully');
