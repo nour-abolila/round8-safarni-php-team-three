@@ -77,9 +77,13 @@ class BookingController extends Controller
         return $this->carServices->searchCars($search);
     }
 
-    public function getUserBookings($type)
+    public function getUserBookings(Request $request)
     {
-        $bookings = $this->bookRepository->getUserBookings($type);
+        $request->validate([
+            'type' =>'required|string|in:Car,Flight,Room,Tour'
+        ]);
+
+        $bookings = $this->bookRepository->getUserBookings($request->type);
         return ApiResponse::success(
             data: BookingResource::collection($bookings),
             message: 'User Bookings are :'
