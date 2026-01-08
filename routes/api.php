@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\TourController;
 use App\Http\Controllers\Api\FavoriteController;
+use App\Models\Flight;
 use App\Models\User;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BookingController;
@@ -100,6 +101,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/book-car', [BookingController::class, 'bookCar']);
 
+    Route::post('/search-flights', [BookingController::class, 'searchFlights']);
+
+
     Route::post('search-car', [BookingController::class, 'searchCar']);
 
     Route::post('create-payment-intent/{bookingId}', [PaymentController::class, 'makePayment']);
@@ -109,5 +113,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('webhook/stripe', [PaymentWebhookController::class, 'handle']);
 
-
-    Route::post('/search-flights', [BookingController::class, 'searchFlights']);
+Route::get('all-flights', function(){
+    return Flight::all();
+});
