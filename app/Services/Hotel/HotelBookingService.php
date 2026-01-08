@@ -25,8 +25,6 @@ class HotelBookingService
       
             'user_id'        => $userId,
       
-            'booking_type'   => 'hotel',
-      
             'booking_status' => 'pending',
       
             'payment_status' => 'unpaid',
@@ -74,6 +72,8 @@ class HotelBookingService
       
         ->where('user_id', $userId)
       
+         ->whereHas('bookingDetails')
+
         ->orderByDesc('created_at')
       
         ->paginate($perPage);

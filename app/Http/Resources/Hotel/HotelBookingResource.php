@@ -8,11 +8,24 @@ class HotelBookingResource extends JsonResource
 {
     public function toArray($request): array
     {
+        $bookingDetail = $this->bookingDetails->first();
+
+        $bookingType = $bookingDetail
+        
+        ? match ($bookingDetail->bookable_type) {
+        
+            \App\Models\Room::class => 'hotel',
+        
+            default => null,
+        }
+        
+        : null;
+        
         return [
            
             'id'  => $this->id,
            
-            'booking_type'   => $this->booking_type,
+            'booking_type' => $bookingType,
            
             'booking_status' => $this->booking_status,
            

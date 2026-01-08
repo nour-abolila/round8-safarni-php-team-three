@@ -16,8 +16,6 @@ class HotelReviewService
 
         $hasStayed = Booking::where('user_id', $userId)
 
-        ->where('booking_type', 'hotel')
-
         ->where('booking_status', 'completed')
 
         ->whereHas('bookingDetails', function ($q) use ($hotelId) {
