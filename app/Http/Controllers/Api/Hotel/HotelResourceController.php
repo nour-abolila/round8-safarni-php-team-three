@@ -19,7 +19,8 @@ class HotelResourceController extends Controller
 
     public function index(Request $request)
     {
-         $lat = $request->query('lat'); 
+
+        $lat = $request->query('lat'); 
 
          $lng = $request->query('lng'); 
 
