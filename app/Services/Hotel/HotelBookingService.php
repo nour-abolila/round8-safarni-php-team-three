@@ -22,27 +22,46 @@ class HotelBookingService
 
         $totalAmount = $room->price_per_night * $nights;
         
+    $userExistingBooking = Booking::where('user_id', $userId)
+   
+    ->where('booking_status', 'pending')
+   
+    ->whereHas('bookingDetails', function($q) use ($room) {
+   
+        $q->where('bookable_id', $room->id)
+   
+        ->where('bookable_type', Room::class);
+   
+    })
+   
+    ->first();
 
-        $existingBooking = Booking::where('user_id', $userId)
-     
-        ->where('booking_status', 'pending') 
-     
-        ->whereHas('bookingDetails', function($q) use ($room) {
-     
-            $q->where('bookable_id', $room->id)
-     
-            ->where('bookable_type', Room::class);
-        })
-     
-        ->first();
-
-       if ($existingBooking) {
+    if ($userExistingBooking) {
    
         throw ValidationException::withMessages([
-           
-            'room' => ['This room is already booked by you.']
+   
+            'room' => ['You have already booked this room.']
         ]);
-       
+    }
+
+    $conflictBooking = BookingDetail::where('bookable_id', $room->id)
+
+    ->where('bookable_type', Room::class)
+
+    ->whereHas('booking', function($q) {
+
+        $q->where('booking_status', 'pending');
+
+    })
+
+    ->exists();
+
+    if ($conflictBooking) {
+
+        throw ValidationException::withMessages([
+
+            'room' => ['This room is not available']
+        ]);
     }
 
         $booking = Booking::create([
