@@ -27,4 +27,11 @@ class BookRepository
     {
         return Booking::findOrFail($id);
     }
+
+    public function getAllBookings($status)
+    {
+        return Booking::with('details')
+        ->where('booking_status',$status)
+        ->get();
+    }
 }

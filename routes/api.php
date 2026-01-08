@@ -94,9 +94,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/change-password', [AuthController::class, 'changePassword']);
     Route::get('/profile', [AuthController::class, 'show']);
     Route::put('/profile', [AuthController::class, 'update']);
-    Route::post('/search-flights', [BookingController::class, 'searchFlights']);
-
-    Route::get('/flight-seats/{id}', action: [BookingController::class, 'getFlightSeat']);
 
     Route::get('/flight-seats/{id}', [BookingController::class, 'getFlightSeat']);
     Route::post('/book-flight/{flightId}', [BookingController::class, 'bookFlight']);
@@ -111,3 +108,4 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('webhook/stripe', [PaymentWebhookController::class, 'handle']);
 
 
+    Route::post('/search-flights', [BookingController::class, 'searchFlights']);
