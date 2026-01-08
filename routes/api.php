@@ -6,10 +6,14 @@ use App\Http\Controllers\Api\FavoriteController;
 use App\Models\User;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\Payment\PaymentController;
+use App\Http\Controllers\Payment\PaymentWebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\HotelResourceController;
-use App\Http\Controllers\Api\RoomResourceController;
+use App\Http\Controllers\Api\Hotel\HotelResourceController;
+use App\Http\Controllers\Api\Hotel\RoomResourceController;
+use App\Http\Controllers\Api\Hotel\HotelBookingResourceController;
+use App\Http\Controllers\Api\Hotel\HotelReviewResourceController;
 
 
 Route::get('/user', function (Request $request) {
@@ -17,14 +21,36 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
+Route::apiResource('hotel', HotelResourceController::class) ->only(['index', 'show']);
+
+Route::apiResource('room', RoomResourceController::class) ->only(['show']);
+
+Route::apiResource('hotel', HotelResourceController::class)->only(['index', 'show']);
+Route::apiResource('room', RoomResourceController::class)->only(['show']);
+Route::apiResource('hotel', HotelResourceController::class) ->only(['index', 'show']);
+
+Route::apiResource('room', RoomResourceController::class) ->only(['show']);
+
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::apiResource('hotel-bookings', HotelBookingResourceController::class)
+
+    ->only(['index', 'store']);
+
+    Route::apiResource('hotel-review', HotelReviewResourceController::class)
+
+    ->only(['index', 'store']);
+});
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
+
 Route::apiResource('hotel', HotelResourceController::class)->only(['index', 'show']);
 Route::apiResource('room', RoomResourceController::class)->only(['show']);
 
 //! login
 Route::post('/login', [AuthController::class, 'login']);
-
-Route::apiResource('hotel', HotelResourceController::class)->only(['index', 'show']);
-Route::apiResource('room', RoomResourceController::class)->only(['show']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 
@@ -60,11 +86,28 @@ Route::apiResource('hotel', HotelResourceController::class) ->only(['index', 'sh
 Route::apiResource('room', RoomResourceController::class) ->only(['show']);
 
 
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/change-password', [AuthController::class, 'changePassword']);
+    Route::get('/profile', [AuthController::class, 'show']);
+    Route::put('/profile', [AuthController::class, 'update']);
     Route::post('/search-flights', [BookingController::class, 'searchFlights']);
+
+    Route::get('/flight-seats/{id}', action: [BookingController::class, 'getFlightSeat']);
+
     Route::get('/flight-seats/{id}', [BookingController::class, 'getFlightSeat']);
     Route::post('/book-flight/{flightId}', [BookingController::class, 'bookFlight']);
+
+    Route::post('/book-car', [BookingController::class, 'bookCar']);
+
+    Route::post('search-car', [BookingController::class, 'searchCar']);
+
+    Route::post('create-payment-intent/{bookingId}', [PaymentController::class, 'makePayment']);
 });
+
+Route::post('webhook/stripe', [PaymentWebhookController::class, 'handle']);
+
 

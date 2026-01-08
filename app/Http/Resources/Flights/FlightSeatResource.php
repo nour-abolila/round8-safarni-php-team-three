@@ -12,6 +12,7 @@ class FlightSeatResource extends JsonResource
             'id' => $this->id,
             'seat_number' => $this->seat_number,
             'status' => $this->status,
+            'is_who_booked' => $this->who_booked(auth()->user()->id)
         ];
     }
 }

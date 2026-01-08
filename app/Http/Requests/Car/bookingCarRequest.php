@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Car;
 
+use App\Helper\ApiResponse;
+use App\Models\BookingDetail;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
-class VerifyOtpRequest extends FormRequest
+class bookingCarRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +25,10 @@ class VerifyOtpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|exists:users,id',
-            'otp'     => 'required|digits:4',
+            'quantity' => 'required|integer|min:1',
+            'car_id' => 'required|exists:cars,id',
         ];
     }
+
+
 }

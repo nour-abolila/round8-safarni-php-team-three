@@ -27,6 +27,9 @@ class DatabaseSeeder extends Seeder
             AirportSeeder::class,
             SeatSeeder::class,
             ReviewSeeder::class,
+
+           
+
         ]);
 
         $this->call([
