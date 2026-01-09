@@ -55,7 +55,16 @@ class HotelService {
         $hotel->rooms = $hotel->rooms()
         
         ->where('is_available', true)
+              
+        ->whereDoesntHave('bookingDetails', function($q) {
         
+            $q->whereHas('booking', function($q2) {
+        
+                $q2->where('booking_status', 'pending'); 
+        
+            });
+        
+        })
         ->paginate($roomsPerPage);
 
         return $hotel;
