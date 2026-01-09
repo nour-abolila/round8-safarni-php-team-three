@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\TourController;
 use App\Http\Controllers\Api\FavoriteController;
+use App\Models\Flight;
 use App\Models\User;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BookingController;
@@ -101,20 +102,24 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/change-password', [AuthController::class, 'changePassword']);
     Route::get('/profile', [AuthController::class, 'show']);
     Route::put('/profile', [AuthController::class, 'update']);
-    Route::post('/search-flights', [BookingController::class, 'searchFlights']);
-
-    Route::get('/flight-seats/{id}', action: [BookingController::class, 'getFlightSeat']);
 
     Route::get('/flight-seats/{id}', [BookingController::class, 'getFlightSeat']);
     Route::post('/book-flight/{flightId}', [BookingController::class, 'bookFlight']);
 
     Route::post('/book-car', [BookingController::class, 'bookCar']);
 
+    Route::post('/search-flights', [BookingController::class, 'searchFlights']);
+
+
     Route::post('search-car', [BookingController::class, 'searchCar']);
 
     Route::post('create-payment-intent/{bookingId}', [PaymentController::class, 'makePayment']);
+
+    Route::get('get-user-bookings',[BookingController::class,'getUserBookings']);
 });
 
 Route::post('webhook/stripe', [PaymentWebhookController::class, 'handle']);
 
-
+Route::get('all-flights', function(){
+    return Flight::all();
+});

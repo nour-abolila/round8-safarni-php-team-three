@@ -28,7 +28,7 @@ class TourDetailResource extends JsonResource
             'rating_average' => round(optional($this->reviews)->avg('rating'), 1),
             'reviews_count' => optional($this->reviews)->count(),
             'schedules' => $this->schedules,
-            'price' => 150 * $this->duration,
+            'price' => $this->price,
         ];
     }
 }

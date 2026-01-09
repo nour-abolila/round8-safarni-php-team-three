@@ -3,6 +3,7 @@
 namespace App\Services\BookingServices\Cars;
 
 use App\Helper\ApiResponse;
+use App\Http\Resources\Bookings\BookingResource;
 use App\Http\Resources\Cars\CarResource;
 use App\Models\Car;
 use App\Repositories\BookingRepositories\BookRepository;
@@ -29,12 +30,13 @@ class CarService
 
         DB::beginTransaction();
         try {
-            $this->proccessBooking($car,$data);
+            $booking = $this->proccessBooking($car,$data);
 
             DB::commit();
 
             return ApiResponse::success([
-                'car' => new CarResource($car),
+                'car'=> new CarResource($car) ,
+                'booking' => new BookingResource($booking)
             ],
             message: 'Car booked successfully');
 
@@ -56,6 +58,7 @@ class CarService
         ]);
 
         $this->createBookingDetails($book->id,$car,$data);
+        return $book;
     }
 
     private function createBooking(array $data)

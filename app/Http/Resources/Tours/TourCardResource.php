@@ -17,7 +17,7 @@ class TourCardResource extends JsonResource
             'image' => $this->images->first()?->url,
             'rating_average' => round(optional($this->reviews)->avg('rating'), 1),
             'reviews_count' => optional($this->reviews)->count(),
-            'price' => 150 * $this->duration,
+            'price' => $this->price,
         ];
     }
 }

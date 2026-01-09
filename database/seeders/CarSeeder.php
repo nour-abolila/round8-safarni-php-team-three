@@ -23,6 +23,55 @@ class CarSeeder extends Seeder
         $cars = [];
         $brands = ['Toyota', 'Honda', 'Ford', 'BMW', 'Mercedes', 'Hyundai', 'Kia', 'Nissan', 'Chevrolet'];
 
+        $images = [
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24979.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/25034.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24980.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24890.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24822.jpeg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24866.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24800.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24986.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24879.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24705.jpeg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24889.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24672.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24841.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24638.jpeg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24533.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24533.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24670.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24495.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24412.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24461.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24428.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24420.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24441.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24407.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24441.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24383.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24415.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24403.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24423.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24422.jpg'
+        ];
+
+        $additionalImages = [
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24397.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24392.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24386.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24379.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24375.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24368.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24362.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24358.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24352.jpg',
+            'https://4kwallpapers.com/images/walls/thumbs_2t/24345.jpg',
+        ];
+
+        $allImages = array_merge($images, $additionalImages);
+        $totalImages = count($allImages);
+
         $modelsByBrand = [
             'Toyota' => ['Camry', 'Corolla', 'RAV4', 'Land Cruiser', 'Yaris'],
             'Honda' => ['Accord', 'Civic', 'CR-V', 'Pilot'],
@@ -147,7 +196,7 @@ class CarSeeder extends Seeder
                 'has_ac' => true,
                 'current_location_lat' => $lat,
                 'current_location_lng' => $lng,
-                'price' => $price, // ✅ حقل السعر الجديد
+                'price' => $price,
                 'location' => $formattedLocation,
                 'features' => json_encode([
                     'bluetooth' => rand(0, 1) ? true : false,
@@ -169,8 +218,72 @@ class CarSeeder extends Seeder
         }
 
         DB::table('cars')->insert($cars);
-
         $this->command->info('✅ تم إنشاء ' . count($cars) . ' سيارة مع جميع البيانات الفنية والأسعار بنجاح!');
+
+        $this->addImagesToCars($allImages, $totalImages);
+    }
+    private function addImagesToCars(array $allImages, int $totalImages): void
+    {
+        $cars = DB::table('cars')->get();
+        $imageRecords = [];
+
+        foreach ($cars as $car) {
+            $selectedImageIndexes = array_rand($allImages, 3);
+
+            if (!is_array($selectedImageIndexes)) {
+                $selectedImageIndexes = [$selectedImageIndexes];
+            }
+
+            foreach ($selectedImageIndexes as $index) {
+                $imageRecords[] = [
+                    'imageable_id' => $car->id,
+                    'imageable_type' => 'App\Models\Car',
+                    'url' => $allImages[$index],
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ];
+            }
+        }
+
+        DB::table('images')->insert($imageRecords);
+        $this->command->info('✅ تم إضافة ' . count($imageRecords) . ' صورة للسيارات (3 صور لكل سيارة)');
+    }
+
+    private function addImagesToCarsWithVariety(array $allImages): void
+    {
+        $cars = DB::table('cars')->get();
+        $imageRecords = [];
+
+        $imagesPerCar = 3;
+        $totalCars = count($cars);
+        $totalNeededImages = $totalCars * $imagesPerCar;
+
+        $imageIndexes = [];
+        for ($i = 0; $i < $totalNeededImages; $i++) {
+            $imageIndexes[] = $i % count($allImages);
+        }
+
+        shuffle($imageIndexes);
+
+        $currentIndex = 0;
+        foreach ($cars as $car) {
+            for ($j = 0; $j < $imagesPerCar; $j++) {
+                if ($currentIndex < count($imageIndexes)) {
+                    $imageIndex = $imageIndexes[$currentIndex];
+                    $imageRecords[] = [
+                        'imageable_id' => $car->id,
+                        'imageable_type' => 'App\Models\Car',
+                        'url' => $allImages[$imageIndex],
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ];
+                    $currentIndex++;
+                }
+            }
+        }
+
+        DB::table('images')->insert($imageRecords);
+        $this->command->info('✅ تم إضافة ' . count($imageRecords) . ' صورة متنوعة للسيارات');
     }
 
     private function determineVehicleClass(string $brand, string $model): string
@@ -290,8 +403,6 @@ class CarSeeder extends Seeder
 
         return max(4.0, round($acceleration, 1));
     }
-
-
     private function determinePrice(string $vehicleClass, string $brand, string $model, int $power, int $maxSpeed, float $acceleration): float
     {
         $basePrices = [

@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Api\Hotel;
 
 use App\Http\Controllers\Controller;
-use App\Services\RoomService;
+use App\Services\Hotel\RoomService;
 use App\Http\Resources\Hotel\RoomDetailsResource;
 use App\Helper\ApiResponse;
 

@@ -27,6 +27,7 @@ class TourSeeder extends Seeder
             [
                 'title' => 'Magical Paris',
                 'slug' => 'magical-paris',
+                'price' => 1200.00,
                 'duration' => 5,
                 'visit_season' => 'Spring',
                 'activities' => ['Eiffel Tower Visit', 'Seine River Cruise', 'Louvre Museum'],
@@ -35,6 +36,7 @@ class TourSeeder extends Seeder
             [
                 'title' => 'Safari Adventure in Kenya',
                 'slug' => 'safari-kenya',
+                'price' => 2500.00,
                 'duration' => 7,
                 'visit_season' => 'Summer',
                 'activities' => ['Game Drive', 'Masai Mara Visit', 'Camping'],
@@ -43,6 +45,7 @@ class TourSeeder extends Seeder
             [
                 'title' => 'Kyoto Cultural Tour',
                 'slug' => 'kyoto-cultural',
+                'price' => 1800.00,
                 'duration' => 4,
                 'visit_season' => 'Autumn',
                 'activities' => ['Tea Ceremony', 'Temple Visits', 'Bamboo Forest Walk'],

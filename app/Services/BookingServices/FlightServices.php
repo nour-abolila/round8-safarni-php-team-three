@@ -3,6 +3,7 @@
 namespace App\Services\BookingServices;
 
 use App\Helper\ApiResponse;
+use App\Http\Resources\Bookings\BookingResource;
 use App\Models\Airport;
 use App\Models\Booking;
 use App\Models\Flight;
@@ -107,7 +108,10 @@ public function __construct(
             return $this->processBooking($flightId, $seatId);
         });
         } catch (Exception $e) {
-            return ApiResponse::error(message: 'حدث خطأ أثناء عملية الحجز. يرجى المحاولة مرة أخرى.');
+            return ApiResponse::error(message:
+            'حدث خطأ أثناء عملية الحجز. يرجى المحاولة مرة أخرى.'
+            .$e->getMessage()
+        );
         }
     }
     private function processBooking($flightId, array $seatId)
@@ -153,7 +157,7 @@ public function __construct(
             ], $seatId);
 
         return ApiResponse::success(
-            data: [],
+            data: ['booking' => new BookingResource($booking)],
             message: 'تم حجز المقعد بنجاح'
         );
     }
