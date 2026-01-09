@@ -9,7 +9,7 @@ class CategoryService
 {
     public function index(): Collection
     {
-        return Category::all();
+        return Category::with('images')->get();
     }
 }
 
