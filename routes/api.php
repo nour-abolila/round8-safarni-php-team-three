@@ -79,6 +79,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //! bookings
     Route::post('/bookings', [BookingController::class, 'store']);
+    
+    //! tour bookings
+    Route::prefix('tour-bookings')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Api\TourBookingController::class, 'index']);
+        Route::post('/', [\App\Http\Controllers\Api\TourBookingController::class, 'store']);
+        Route::get('/{booking}', [\App\Http\Controllers\Api\TourBookingController::class, 'show']);
+    });
 });
 
 //! hotel

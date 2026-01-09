@@ -26,4 +26,9 @@ class Category extends Model
         return $this->hasMany(Tour::class);
     }
 
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
 }
