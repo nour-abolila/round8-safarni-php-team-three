@@ -12,6 +12,8 @@ class TourCardResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
+            'type' => $this->type,
+            'location' => $this->location,
             'duration' => $this->duration,
             'visit_season' => $this->visit_season,
             'image' => $this->images->first()?->url,

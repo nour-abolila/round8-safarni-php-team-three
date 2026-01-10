@@ -19,16 +19,20 @@ class TourBookingController extends Controller
      */
     public function store(StoreTourBookingRequest $request)
     {
-        $result = $this->tourBookingService->bookTour($request->validated());
-        
-        if (is_array($result) && isset($result['status']) && $result['status'] === 'error') {
-            return ApiResponse::error($result['message'], $result['statusCode'] ?? 400);
-        }
+        try {
+            $result = $this->tourBookingService->bookTour($request->validated());
 
-        return ApiResponse::success(
-            new TourBookingResource($result),
-            'تم حجز الجولة بنجاح'
-        );
+            if (is_array($result) && isset($result['status']) && $result['status'] === 'error') {
+                return ApiResponse::error($result['message'], $result['statusCode'] ?? 400);
+            }
+
+            return ApiResponse::success(
+                new TourBookingResource($result),
+                'تم حجز الجولة بنجاح'
+            );
+        } catch (\Exception $e) {
+            return ApiResponse::error('حدث خطأ غير متوقع: ' . $e->getMessage(), 500);
+        }
     }
 
     /**
@@ -37,7 +41,7 @@ class TourBookingController extends Controller
     public function index(Request $request)
     {
         $bookings = $this->tourBookingService->getUserBookings();
-        
+
         return ApiResponse::success(
             TourBookingResource::collection($bookings),
             'تم جلب حجوزات الجولات بنجاح'
@@ -51,7 +55,7 @@ class TourBookingController extends Controller
     {
         try {
             $booking = $this->tourBookingService->getBookingDetails($bookingId);
-            
+
             return ApiResponse::success(
                 new TourBookingResource($booking),
                 'تم جلب تفاصيل الحجز بنجاح'

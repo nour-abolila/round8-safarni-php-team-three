@@ -8,19 +8,38 @@ use App\Models\BookingDetail;
 use App\Models\Payment;
 use App\Models\Tour;
 use App\Models\TourSchedule;
+use App\Services\Payment\PaymentService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class TourBookingService
 {
+    public function __construct(protected PaymentService $paymentService) {}
+
     public function bookTour(array $data)
     {
         $user = Auth::user();
-        $tour = Tour::findOrFail($data['tour_id']);
+        $tour = Tour::find($data['tour_id']);
+        if (!$tour) {
+            return [
+                'status' => 'error',
+                'message' => 'الجولة المحددة غير موجودة',
+                'statusCode' => 404
+            ];
+        }
+
         $schedule = TourSchedule::where('id', $data['tour_schedule_id'])
             ->where('tour_id', $data['tour_id'])
-            ->firstOrFail();
+            ->first();
+
+        if (!$schedule) {
+            return [
+                'status' => 'error',
+                'message' => 'الموعد المحدد غير موجود لهذه الجولة',
+                'statusCode' => 404
+            ];
+        }
 
         // Check available slots
         if ($schedule->available_slots < $data['quantity']) {
@@ -40,10 +59,9 @@ class TourBookingService
             // Create Booking
             $booking = Booking::create([
                 'user_id' => $user->id,
-                'booking_type' => 'tour',
-                'booking_status' => 'confirmed',
+                'booking_status' => 'pending',
                 'total_amount' => $totalAmount,
-                'payment_status' => 'paid',
+                'payment_status' => 'pending',
             ]);
 
             // Create Booking Detail
@@ -60,21 +78,19 @@ class TourBookingService
                 ],
             ]);
 
-            // Create Payment
-            Payment::create([
-                'booking_id' => $booking->id,
-                'amount' => $totalAmount,
-                'status' => 'completed',
-                'transaction_id' => Str::uuid(),
-                'payment_method' => $data['payment_method'],
-            ]);
-
             // Update Schedule
             $schedule->decrement('available_slots', $data['quantity']);
 
+            // Initiate Payment
+            $payment = $this->paymentService->createPaymentIntentForBooking($booking);
+
             DB::commit();
 
-            return $booking->load(['details.bookable', 'user']);
+            $booking->load(['details.bookable.images', 'details.bookable.schedules', 'user']);
+            $booking->payment_client_secret = $payment->client_secret;
+            $booking->payment_publishable_key = $payment->publishable_key;
+
+            return $booking;
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -90,9 +106,11 @@ class TourBookingService
     {
         $user = Auth::user();
 
-        return Booking::with(['details.bookable', 'details.bookable.images'])
+        return Booking::with(['details.bookable.images', 'details.bookable.schedules'])
             ->where('user_id', $user->id)
-            ->where('booking_type', 'tour')
+            ->whereHas('details', function ($q) {
+                $q->where('bookable_type', Tour::class);
+            })
             ->latest()
             ->paginate(10);
     }
@@ -101,10 +119,12 @@ class TourBookingService
     {
         $user = Auth::user();
 
-        return Booking::with(['details.bookable', 'details.bookable.images', 'user'])
+        return Booking::with(['details.bookable.images', 'details.bookable.schedules', 'user'])
             ->where('id', $bookingId)
             ->where('user_id', $user->id)
-            ->where('booking_type', 'tour')
+            ->whereHas('details', function ($q) {
+                $q->where('bookable_type', Tour::class);
+            })
             ->firstOrFail();
     }
 }

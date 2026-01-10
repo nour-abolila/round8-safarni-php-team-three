@@ -21,6 +21,10 @@ class TourBookingResource extends JsonResource
             'total_amount' => number_format($this->total_amount, 2),
             'booking_status' => $this->booking_status,
             'payment_status' => $this->payment_status,
+            'payment_info' => isset($this->payment_client_secret) ? [
+                'client_secret' => $this->payment_client_secret,
+                'publishable_key' => $this->payment_publishable_key,
+            ] : null,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
         ];
@@ -29,7 +33,7 @@ class TourBookingResource extends JsonResource
     private function getTourDetails()
     {
         $tourDetail = $this->details->firstWhere('bookable_type', 'App\Models\Tour');
-        
+
         if (!$tourDetail) {
             return null;
         }
@@ -46,7 +50,7 @@ class TourBookingResource extends JsonResource
             'visit_season' => $tour->visit_season,
             'activities' => $tour->activities,
             'quantity' => $tourDetail->quantity,
-            'price_per_person' => number_format($tourDetail->price_paid / $tourDetail->quantity, 2),
+            'price_per_person' => number_format($tourDetail->additional_info['price_per_person'] ?? ($tourDetail->price_paid / $tourDetail->quantity), 2),
             'schedule' => $schedule ? [
                 'id' => $schedule->id,
                 'start_date' => $schedule->start_date,
