@@ -74,7 +74,7 @@ class TourSeeder extends Seeder
                 ];
 
                 $tour->images()->create([
-                    'url' => $images,
+                    'url' => $images[$tour->slug],
                 ]);
             }
 
