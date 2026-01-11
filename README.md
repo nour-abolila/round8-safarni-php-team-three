@@ -4,6 +4,9 @@
 Safarni is a comprehensive booking application that allows users to book **flights, hotels, and tours** with ease.  
 The main goal is to provide a seamless and organized booking experience, backed by a robust and scalable API architecture.
 
+This project was developed in a **team environment**, and my main contributions included implementing the **full authentication flow (email, OTP, Google OAuth), user roles & permissions using Spatie, user profile management, and search & filtering for tours and trips**.  
+All my work follows **Clean Code principles**, using a structured approach with **Service classes, Request validation, Resources, Helpers, and Mailables**.
+
 The application focuses on **user management, secure authentication, and a smooth search & filtering experience** for trips and tours.
 
 ---
@@ -74,7 +77,6 @@ This structure ensures maintainability, scalability, and readability of the code
 - **SMTP / Gmail** for sending OTP emails
 - **Postman** for API testing
 
----
 
 ## 📝 Notes
 - The project follows **Clean Code** and **Service-Oriented Architecture**.
