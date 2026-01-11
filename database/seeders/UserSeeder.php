@@ -1,6 +1,7 @@
 <?php
 namespace Database\Seeders;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -21,8 +22,6 @@ class UserSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'password' => Hash::make('password123'),
                 'mobile' => '+966501234567',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
             [
                 'full_name' => 'سارة عبدالله',
@@ -30,8 +29,6 @@ class UserSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'password' => Hash::make('password123'),
                 'mobile' => '+966502345678',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
             [
                 'full_name' => 'محمد الخالد',
@@ -39,11 +36,11 @@ class UserSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'password' => Hash::make('password123'),
                 'mobile' => '+966503456789',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ],
         ];
-        DB::table('users')->insert($users);
 
+        foreach ($users as $user) {
+            User::updateOrCreate(['email' => $user['email']], $user);
+        }
     }
 }
