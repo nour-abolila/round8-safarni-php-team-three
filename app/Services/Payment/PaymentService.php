@@ -19,6 +19,17 @@ class PaymentService
     {
         $booking = $this->bookingsRepositories->find($bookingId);
 
+        $payment = $this->createPaymentIntentForBooking($booking);
+
+        return ApiResponse::success([
+           new PaymentResource($payment)
+        ],
+            'Payment intent created successfully',
+            200);
+    }
+
+    public function createPaymentIntentForBooking($booking)
+    {
         $pay = $this->pay($booking->total_amount);
 
         $payment = $this->createPayment($booking, $pay['transaction_id']);
@@ -26,11 +37,7 @@ class PaymentService
         $payment->client_secret = $pay['client_secret'];
         $payment->publishable_key = $pay['publishable_key'];
 
-        return ApiResponse::success([
-           new PaymentResource($payment)
-        ],
-            'Payment intent created successfully',
-            200);
+        return $payment;
     }
 
     private function createPayment($booking, $transactionId)

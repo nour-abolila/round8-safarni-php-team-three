@@ -27,6 +27,9 @@ class TourSeeder extends Seeder
             [
                 'title' => 'Magical Paris',
                 'slug' => 'magical-paris',
+                'type' => 'full day tour',
+                'location' => 'Paris, France',
+                'price' => 1200.00,
                 'duration' => 5,
                 'visit_season' => 'Spring',
                 'activities' => ['Eiffel Tower Visit', 'Seine River Cruise', 'Louvre Museum'],
@@ -35,6 +38,9 @@ class TourSeeder extends Seeder
             [
                 'title' => 'Safari Adventure in Kenya',
                 'slug' => 'safari-kenya',
+                'type' => 'full day tour',
+                'location' => 'Masai Mara, Kenya',
+                'price' => 2500.00,
                 'duration' => 7,
                 'visit_season' => 'Summer',
                 'activities' => ['Game Drive', 'Masai Mara Visit', 'Camping'],
@@ -43,6 +49,9 @@ class TourSeeder extends Seeder
             [
                 'title' => 'Kyoto Cultural Tour',
                 'slug' => 'kyoto-cultural',
+                'type' => 'full day tour',
+                'location' => 'Kyoto, Japan',
+                'price' => 1800.00,
                 'duration' => 4,
                 'visit_season' => 'Autumn',
                 'activities' => ['Tea Ceremony', 'Temple Visits', 'Bamboo Forest Walk'],
@@ -58,8 +67,14 @@ class TourSeeder extends Seeder
 
             // Add Images
             if (!$tour->images()->exists()) {
+                $images = [
+                    'magical-paris' => 'https://i.pinimg.com/736x/a4/31/08/a4310874e3916f7ffe580b7fb3175e01.jpg',
+                    'safari-kenya' => 'https://i.pinimg.com/736x/a5/55/9f/a5559f11798ba1d3136000119d1bda43.jpg',
+                    'kyoto-cultural' => 'https://i.pinimg.com/736x/9d/2a/13/9d2a13cddf643a68f3523c3fc08cf6e5.jpg',
+                ];
+
                 $tour->images()->create([
-                    'url' => 'https://placehold.co/600x400?text=' . urlencode($tour->title),
+                    'url' => $images,
                 ]);
             }
 
@@ -70,6 +85,12 @@ class TourSeeder extends Seeder
                     'start_date' => now()->addDays(10),
                     'capacity' => 20,
                     'available_slots' => 20,
+                ]);
+                TourSchedule::create([
+                    'tour_id' => $tour->id,
+                    'start_date' => now()->addDays(20),
+                    'capacity' => 15,
+                    'available_slots' => 15,
                 ]);
             }
 
